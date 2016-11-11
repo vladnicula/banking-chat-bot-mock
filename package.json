@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/vladnicula/baking-chat-bot-mock#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "request": "^2.78.0"
   }
 }
