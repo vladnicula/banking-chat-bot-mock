@@ -1,0 +1,25 @@
+{
+  "name": "baking-chat-bot-mock",
+  "version": "1.0.0",
+  "description": "A test for a chat bot for facebook deployed via heroku",
+  "main": "index.js",
+  "scripts": {
+    "test": "I am the danger and I don't want to test anything"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladnicula/baking-chat-bot-mock.git"
+  },
+  "keywords": [
+    "chatbot"
+  ],
+  "author": "Vlad Nicula",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vladnicula/baking-chat-bot-mock/issues"
+  },
+  "homepage": "https://github.com/vladnicula/baking-chat-bot-mock#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
