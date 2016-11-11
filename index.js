@@ -17,6 +17,8 @@ app.get('/webhook', function(req, res) {
   }  
 });
 
-app.listen(3000, function () {
-	console.log('ok');
+var port = process.env.PORT || 8080;
+
+app.listen(port, function () {
+	console.log('listening on', port);
 });
