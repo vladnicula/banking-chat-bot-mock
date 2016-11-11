@@ -4,7 +4,7 @@
   "description": "A test for a chat bot for facebook deployed via heroku",
   "main": "index.js",
   "scripts": {
-    "start": "index.js",
+    "start": "node ./index.js",
     "test": "I am the danger and I don't want to test anything"
   },
   "repository": {
