@@ -38,11 +38,11 @@ module.exports = {
 	},
 
 	getActionById: (actionId) => {
-		return pendingActionsById[targetUserId];
+		return pendingActionsById[actionId];
 	},
 
 	getPendingActionsByUserId: (clientId) => {
-		return (pendingActionsByUserId[targetUserId]||[]).map(this.getActionById);
+		return (pendingActionsByUserId[clientId]||[]).map(this.getActionById);
 	}
 };
 
