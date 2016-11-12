@@ -30,8 +30,33 @@ const actions = (fbMessage, sessions) => {
         },
 
         pendingSend(request) {
+            // request = {
+            //     "sessionId": "2016-11-12T18:18:29.912Z",
+            //     "context": {},
+            //     "text": "transfer 20$ to Vlad",
+            //     "entities": {
+            //         "transferMoney": [{
+            //             "confidence": 0.8679037179914275,
+            //             "type": "value",
+            //             "value": "Send"
+            //         }],
+            //         "amount_of_money": [{
+            //             "confidence": 0.997622997100425,
+            //             "type": "value",
+            //             "value": 20,
+            //             "unit": "$"
+            //         }],
+            //         "contact": [{
+            //             "confidence": 0.6288907397895421,
+            //             "type": "value",
+            //             "value": "Vlad",
+            //             "suggested": true
+            //         }]
+            //     }
+            // }
             console.log(JSON.stringify(request));
-            request.context.contact = request.entities.contact;
+            request.context.contact = request.entities.contact.value;
+            request.context.cash = request.entities.amount_of_money.value + request.entities.amount_of_money.unit;
             return Promise.resolve(request.context); 
         },
 
