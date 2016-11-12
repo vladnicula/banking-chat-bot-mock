@@ -29,7 +29,7 @@ const actions = (fbMessage, sessions) => {
             }
         },
 
-        pendingSend(request) {
+        pendingSend (request) {
             // request = {
             //     "sessionId": "2016-11-12T18:18:29.912Z",
             //     "context": {},
@@ -54,7 +54,16 @@ const actions = (fbMessage, sessions) => {
             //         }]
             //     }
             // }
-            console.log(JSON.stringify(request));
+            // console.log(JSON.stringify(request));
+            const {sessionId, entities} = request;
+            const {value:ammout} = entities.amount_of_money;
+            const {value:type} = entities.transferMoney;
+            const {value:targetName} = entities.contact;
+
+            const {fbid:senderId} = sessions[sessionId];
+
+            console.log({senderId, ammout, type, targetName});
+
             request.context.contact = request.entities.contact.value;
             request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
             return Promise.resolve(request.context); 

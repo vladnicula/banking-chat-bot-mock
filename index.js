@@ -15,6 +15,9 @@ const log = require('node-wit').log;
 const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
 const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
+// data layer init
+const fixtures = require('./fixtures');
+
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
