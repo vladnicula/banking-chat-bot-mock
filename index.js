@@ -94,7 +94,8 @@ app.post('/webhook/', function (req, res) {
 
     const data = req.body;
 
-  if (data.object === 'page') {
+  // if (data.object === 'page') {
+    console.warn('entry', data.entry)
     data.entry.forEach(entry => {
       entry.messaging.forEach(event => {
         if (event.message && !event.message.is_echo) {
@@ -120,6 +121,7 @@ app.post('/webhook/', function (req, res) {
               }
               // Else, handle it with WIT
               else {
+                  console.warn('_____wit as seen these___')
                   // Let's forward the message to the Wit.ai Bot Engine
                   // This will run all actions until our bot has nothing left to do
                   wit.runActions(
@@ -149,7 +151,7 @@ app.post('/webhook/', function (req, res) {
         }
       })
     })
-  }
+  // }
         
     res.sendStatus(200);
 });
