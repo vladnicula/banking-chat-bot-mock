@@ -106,7 +106,7 @@ app.post('/webhook/', function (req, res) {
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if (event.message) {
+        if (event.message && typeof event.message === 'string') {
 
             // See if the message can be handled without WIT (e.g location sharing)
             const handled = handleStaticActions(event);
