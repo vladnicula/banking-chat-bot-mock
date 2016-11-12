@@ -6,6 +6,7 @@ const userService = require('../services/user-service');
 const pendingActionService = require('../services/pending-action-service');
 
 function requestMoneySendAction( senderChatId, {ammount, type, targetName}, fbSendTextMessage) {
+	console.log(userService, userService.getUserByName);
 	const targetUser = userService.getUserByName(targetName);
 	const senderUser = userService.getUserByChatId(senderChatId);
 
