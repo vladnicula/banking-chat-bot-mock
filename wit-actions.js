@@ -1,5 +1,7 @@
 'use strict';
 
+const requestMoneySendAction = require('./actions/request-money-send');
+
 const actions = (fbMessage, sessions) => {
     return {
         send(request, response) {
@@ -30,31 +32,7 @@ const actions = (fbMessage, sessions) => {
         },
 
         pendingSend (request) {
-            // request = {
-            //     "sessionId": "2016-11-12T18:18:29.912Z",
-            //     "context": {},
-            //     "text": "transfer 20$ to Vlad",
-            //     "entities": {
-            //         "transferMoney": [{
-            //             "confidence": 0.8679037179914275,
-            //             "type": "value",
-            //             "value": "Send"
-            //         }],
-            //         "amount_of_money": [{
-            //             "confidence": 0.997622997100425,
-            //             "type": "value",
-            //             "value": 20,
-            //             "unit": "$"
-            //         }],
-            //         "contact": [{
-            //             "confidence": 0.6288907397895421,
-            //             "type": "value",
-            //             "value": "Vlad",
-            //             "suggested": true
-            //         }]
-            //     }
-            // }
-            console.log(JSON.stringify(request.entities));
+
             const {sessionId, entities} = request;
             const {value:ammout} = entities.amount_of_money[0];
             const {value:type} = entities.transferMoney[0];
@@ -62,11 +40,14 @@ const actions = (fbMessage, sessions) => {
 
             const {fbid:senderId} = sessions[sessionId];
 
-            console.log({senderId, ammout, type, targetName});
+            console.log('pendign send', {senderId, ammout, type, targetName});
 
-            request.context.contact = request.entities.contact.value;
-            request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
-            return Promise.resolve(request.context); 
+            return requestMoneySendAction(senderId, {ammout, type, targetName}, fbSendTextMessage)
+                .then(()=>{
+                    request.context.contact = request.entities.contact.value;
+                    request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
+                    return Promise.resolve(request.context); 
+                });
         },
 
         findATM(request) {
