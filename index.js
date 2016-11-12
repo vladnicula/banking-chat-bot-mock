@@ -22,7 +22,7 @@ const fixtures = require('./fixtures');
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
-const sessions = {};
+const sessions = store.getSessions();
 
 /** Helper function to send a Facebook Message */
 const fbMessage = (id, message) => {
