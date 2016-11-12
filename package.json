@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A test for a chat bot for facebook deployed via heroku",
   "engines": {
-    "node": "5.9.1"
+    "node": "6.9.1"
   },
   "main": "index.js",
   "scripts": {
