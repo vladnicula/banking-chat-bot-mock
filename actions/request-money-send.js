@@ -1,6 +1,6 @@
 const USER_CHAT_IDS = require('../data/user-chat-ids');
 
-const isTemporarySendRequest = (message) => {
+const isTemporarySendRequest = (message='') => {
 	const parts = message.split(' ');
 
 	console.log('isTemporarySendRequest', {message}, parts.length, USER_CHAT_IDS[parts[1]]);
