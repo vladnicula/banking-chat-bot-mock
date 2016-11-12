@@ -97,10 +97,11 @@ app.post('/webhook/', function (req, res) {
 
               // See if the message can be handled without WIT (e.g location sharing)
               const handled = handleStaticActions(event, fbMessage);
+              console.log('handled', !!handled);
               if (handled) {
                   return handled.then(()=>{
                     res.sendStatus(200);
-                  })
+                  });
               }
               // Else, handle it with WIT
               else {
