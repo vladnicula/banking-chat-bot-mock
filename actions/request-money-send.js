@@ -15,7 +15,7 @@ const isTemporarySendRequest = (message) => {
 
 function requestMoneySendAction(senderIdentifer, messageText, sendTextMessage) {
 	const [ammount, name] = messageText.split(' ');
-	const message = `Hey ${name}, ${senderIdentifer} want's to send \$${ammout} to you.`;
+	const message = `Hey ${name}, ${senderIdentifer} want's to send \$${ammount} to you.`;
 	const quickActions = ['accept', 'reject'];
 
 	sendTextMessage(USER_CHAT_IDS[recieverName], {
