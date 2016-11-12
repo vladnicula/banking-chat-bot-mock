@@ -19,7 +19,10 @@ function requestMoneySendAction(senderIdentifer, messageText, fbSendTextMessage)
 	const quickActions = ['accept', 'reject'].map((name)=>({
 		"content_type":"text",
 		"title":name,
-		"payload":name
+		// this would be persisted and set in our 'current progress' persistence
+		// layer in the app if we ever reach production. The chat bot should not
+		// have control over what user accepts what thing
+		"payload":`payment-accept:${name}-${senderIdentifer}`
 	}));
 
 	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name].chatId, {
