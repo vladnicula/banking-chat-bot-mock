@@ -1,16 +1,16 @@
-const request = require('request');
+var request = require('request');
 
-const parseResponse = (err, res, body) => {
+var parseResponse = (err, res, body, callback) => {
     if (err) {
         console.error(err);
         return;
     }
 
     if (res.statusCode === 200) {
-        const people = [];
-        const money = [];
-        let operation = null;
-        const res = JSON.parse(body).response;
+        var people = [];
+        var money = [];
+        var operation = null;
+        var res = JSON.parse(body).response;
 
         // Search for the entities
         res.entities.forEach((entity) => {
@@ -27,7 +27,7 @@ const parseResponse = (err, res, body) => {
         res.entailments.forEach((word) => {
             // Only take into consideration if contextScore > 0.5
             if (word.contextScore >= 0.5) {
-                let re = new RegExp(["transfer", "send", "give"].join('|'), 'i');
+                var re = new RegExp(["transfer", "send", "give"].join('|'), 'i');
                 if (re.test(word.entailedWords)) {
                     operation = 'SEND';
                 }
@@ -43,11 +43,19 @@ const parseResponse = (err, res, body) => {
         The operation to do is: ${operation}.
         Sum & currency: ${money[0].sum} ${money[0].currency}.
         People involved: ${people}
-        `)
+        `);
+
+        callback && callback(
+            operation,
+            money,
+            people
+        );
     }
 };
 
-const makeRequest = (text) => {
+module.exports = makeRequest;
+
+var makeRequest = (text, callback) => {
     request.post({
         method: 'POST',
         url: 'http://api.textrazor.com',
@@ -55,14 +63,16 @@ const makeRequest = (text) => {
             'X-TextRazor-Key': '086f88d52ddb4c9d6d5815e0f92033835f0371f1d09b1699faf161b2'
         },
         body: `text=${text}&extractors=entailments,entities`
-    }, parseResponse);
+    }, function (err, res, body) {
+        return parseResponse(err, res, body, callback);
+    });
 };
 
 
-makeRequest('Transfer 100 $ to Vlad Nicula');
-makeRequest('Receive $10 from Anna and Bogdan');
+// makeRequest('Transfer 100 $ to Vlad Nicula');
+// makeRequest('Receive $10 from Anna and Bogdan');
 
-// const responseExample = {
+// var responseExample = {
 //     "response": {
 //         "language": "eng",
 //         "languageIsReliable": false,
