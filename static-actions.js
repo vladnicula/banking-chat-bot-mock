@@ -32,6 +32,8 @@ const staticActions = (event, fbSend) => {
         });
     }
 
+    console.log('is this accept?', event.message.text.toLowerCase(), event.message.text.toLowerCase() === 'accept');
+
     if ( 
         event.message.text.toLowerCase() === 'accept' 
         && pendingActionService.getPendingActionsByUserId(senderId).length ) {
