@@ -2,6 +2,9 @@
   "name": "baking-chat-bot-mock",
   "version": "1.0.0",
   "description": "A test for a chat bot for facebook deployed via heroku",
+  "engines": {
+    "node": "5.9.1"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
