@@ -3,7 +3,7 @@ const pendingActionsByUserId = {};
 
 const uuid = require('uuid');
 
-module.exports = {
+const pendingActionService = {
 	registerPendingAction: (actionDescriptor, sourceUserId, targetUserId) => {
 		const actionId = `pa-${Date.now()}-${uuid()}`;
 
@@ -42,7 +42,9 @@ module.exports = {
 	},
 
 	getPendingActionsByUserId: (clientId) => {
-		return (pendingActionsByUserId[clientId]||[]).map(this.getActionById);
+		return (pendingActionsByUserId[clientId]||[]).map(pendingActionService.getActionById);
 	}
 };
+
+module.exports = pendingActionService;
 
