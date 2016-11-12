@@ -64,8 +64,10 @@ const actions = (fbMessage, sessions) => {
         },
 
         /** Triggered when a user wants to check their account balance */
-        getBalance() {
-            return Promise.resolve(null);
+        getBalance(request) {
+            const {fbid:senderId} = sessions[request.sessionId];
+            const senderUser = userService.getUserByChatId(senderId);
+            return fbMessage(senderId, {"text": senderUser.balance});
         },
 
         /** Triggered when user wants to transfer money from one of their accounts to another */
