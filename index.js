@@ -46,7 +46,7 @@ const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
 // Setting up our bot
 const wit = new Wit({
     accessToken: WIT_TOKEN,
-    witActions,
+    actions: witActions,
     logger: new log.Logger(log.INFO)
 });
 
