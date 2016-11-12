@@ -50,12 +50,18 @@ function acceptActionByUser ( senderChatId, fbSendTextMessage ) {
 			.sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
 			.then(pendingActions.resolvePendingAction(actionId))
 			.then( () => {
-				fbSendTextMessage( userService.getUserById(targetUserId).chatId, {
-					"text": `Successfuly sent money to ${userService.getUserById(sourceUserId).name}`
-				});
+				return Promise.all([
+					fbSendTextMessage( userService.getUserById(targetUserId).chatId, {
+						"text": `Successfuly sent money to ${userService.getUserById(sourceUserId).name}`
+					}),
+
+					fbSendTextMessage( userService.getUserById(sourceUserId).chatId, {
+						"text": `${userService.getUserById(targetUserId).name} accepted your transaction.`
+					})
+				]);
 			});
 	}
 
 }
 
-module.exports = requestMoneySendAction;
+module.exports = {requestMoneySendAction, acceptActionByUser};

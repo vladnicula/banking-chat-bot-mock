@@ -1,15 +1,18 @@
 'use strict';
 
-const staticActions = (event) => {
-    const attachments = event.message.attachments;
+const {acceptActionByUser} = require('./actions/request-money-send');
+const pendingActionService = require('./services/pending-action-service'); 
 
+const staticActions = (event, fbSend) => {
+    const attachments = event.message.attachments;
+    const senderId = event.sender.id;
     // Handle location
     if (attachments && attachments[0].payload.coordinates) {
         const ATMLocation = '46.771450,23.626898';
         const currentLocation = `${attachments[0].payload.coordinates.lat},${attachments[0].payload.coordinates.long}`;
         const directionsUrl = `http://www.google.com/maps/dir/${currentLocation}/${ATMLocation}`;
 
-        return {
+        return fbSend(event.sender.id, {
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -26,9 +29,16 @@ const staticActions = (event) => {
                     }]
                 }
             }
-        }
+        });
     }
-    
+
+    if ( 
+        event.message.text.toLowerCase() === 'accept' 
+        && pendingActionService.getPendingActionsByUserId(senderId).length ) {
+
+        return acceptActionByUser(senderId, fbSend);
+    }
+
     return null;
 };
 

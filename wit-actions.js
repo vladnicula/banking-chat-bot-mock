@@ -1,6 +1,6 @@
 'use strict';
 
-const requestMoneySendAction = require('./actions/request-money-send');
+const {requestMoneySendAction} = require('./actions/request-money-send');
 
 const actions = (fbMessage, sessions) => {
     return {
