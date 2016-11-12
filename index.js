@@ -4,14 +4,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
-const textrazor = require('./text-analysis');
 const parser = require('./parse-request');
 
 app.set('port', (process.env.PORT || 5000));
 
 const USER_CHAT_IDS = {
-	'Raul': '981647388611508',
-	'Vlad': '1221584201246326'
+    'Raul': '981647388611508',
+    'Vlad': '1221584201246326'
 };
 
 // Process application/x-www-form-urlencoded
@@ -22,13 +21,7 @@ app.use(bodyParser.json());
 
 // Index route
 app.get('/', function (req, res) {
-    textrazor('Transfer 100 $ to Vlad Nicula', function (operation, money, people) {
-        res.send(`
-The operation to do is: ${operation}.
-Sum & currency: ${money[0].sum} ${money[0].currency}.
-People involved: ${people}
-`);
-    });
+    res.send('Working!');
 });
 
 // for Facebook verification
@@ -68,29 +61,7 @@ app.post('/webhook/', function (req, res) {
         if (event.message) {
             const response = parser(event);
             sendTextMessage(sender, response);
-	    }
-
-//         	// const coordinates = event.message.attachments.payload.coordinates;
-//             let text = event.message.text;
-
-// //             try {
-// // 				textrazor(text, function (operation, money, people) {
-// // const message = `
-// // The operation to do is: ${operation}.
-// // Sum & currency: ${money[0].sum} ${money[0].currency}.
-// // People involved: ${people}
-// // `;
-
-// // 					sendTextMessage(sender, message.substring(0, 200));
-// // 	            });
-// // 			}
-// //             catch (err) {
-// //             	console.log('textrazor err', err);
-// //             	sendTextMessage(sender, 'Huston, we have a problem: '+err.toString());
-// //             }
-
-
-//         }
+        }
     }
     res.sendStatus(200);
 });
