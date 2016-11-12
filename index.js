@@ -5,9 +5,13 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const fetch = require('node-fetch');
 const app = express();
+app.set('port', (process.env.PORT || 5000));
 const handleStaticActions = require('./static-actions');
 
-app.set('port', (process.env.PORT || 5000));
+const Wit = require('node-wit').Wit;
+const log = require('node-wit').log;
+const witActions = require('./wit-actions')(fbMessage, sessions);
+
 
 const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
 const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
@@ -17,6 +21,7 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
 
+/** Helper function to send a Facebook Message */
 const fbMessage = (id, text) => {
     const body = JSON.stringify({
         recipient: {id},
@@ -36,10 +41,6 @@ const fbMessage = (id, text) => {
             return json;
         });
 };
-
-const Wit = require('node-wit').Wit;
-const log = require('node-wit').log;
-const witActions = require('./wit-actions')(fbMessage, sessions);
 
 // Wit.ai parameters
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
@@ -78,7 +79,7 @@ app.get('/', function (req, res) {
     res.send('Working!');
 });
 
-// for Facebook verification
+/** Facebook callback for verification */
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
         res.send(req.query['hub.challenge']);
@@ -86,24 +87,7 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong token');
 });
 
-function sendTextMessage(sender, msg) {
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: FB_PAGE_ACCESS_TOKEN},
-        method: 'POST',
-        json: {
-            recipient: {id: sender},
-            message: msg
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
+/** Handle incoming messages */
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
@@ -115,7 +99,6 @@ app.post('/webhook/', function (req, res) {
             res.sendStatus(200);
             return;
         }
-
 
         const witSession = findOrCreateSession(sender);
 
