@@ -36,7 +36,6 @@ const actions = (fbMessage, sessions) => {
         /** Triggered when a user wants to send money to another */
         pendingSend (request) {
             const {sessionId, entities} = request;
-            console.log(entities);
             const {value:ammount} = entities.amount_of_money[0];
             const {value:type} = entities.transferMoney[0];
             const {value:targetName} = entities.contact[0];
@@ -65,10 +64,16 @@ const actions = (fbMessage, sessions) => {
 
         /** Triggered when a user wants to check their account balance */
         getBalance(request) {
-            console.log(request);
             const {fbid:senderId} = sessions[request.sessionId];
+            const {entities} = request;
             const senderUser = userService.getUserByChatId(senderId);
-            return fbMessage(senderId, {"text": senderUser.balance});
+            let text = senderUser.balance;
+
+            if (entities && entities.ownAccount[0] && entities.ownAccount[0] === "savings") {
+                text = senderUser.balanceSavings;
+            }
+
+            return fbMessage(senderId, {text});
         },
 
         /** Triggered when user wants to transfer money from one of their accounts to another */
