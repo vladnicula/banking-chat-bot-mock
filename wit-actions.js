@@ -42,7 +42,7 @@ const actions = (fbMessage, sessions) => {
 
             console.log('pendign send', {senderId, ammout, type, targetName});
 
-            return requestMoneySendAction(senderId, {ammout, type, targetName}, fbSendTextMessage)
+            return requestMoneySendAction(senderId, {ammout, type, targetName}, fbMessage)
                 .then(()=>{
                     request.context.contact = request.entities.contact.value;
                     request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
