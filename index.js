@@ -10,6 +10,7 @@ const parser = require('./parse-request');
 app.set('port', (process.env.PORT || 5000));
 
 const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
+const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 // This will contain all user sessions.
 // Each session has an entry:
@@ -17,23 +18,23 @@ const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/requ
 const sessions = {};
 
 const fbMessage = (id, text) => {
-  const body = JSON.stringify({
-    recipient: { id },
-    message: { text },
-  });
-  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
-  return fetch('https://graph.facebook.com/me/messages?' + qs, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body,
-  })
-  .then(rsp => rsp.json())
-  .then(json => {
-    if (json.error && json.error.message) {
-      throw new Error(json.error.message);
-    }
-    return json;
-  });
+    const body = JSON.stringify({
+        recipient: {id},
+        message: text
+    });
+    const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
+    return fetch('https://graph.facebook.com/me/messages?' + qs, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body
+    })
+        .then(rsp => rsp.json())
+        .then(json => {
+            if (json.error && json.error.message) {
+                throw new Error(json.error.message);
+            }
+            return json;
+        });
 };
 
 const Wit = require('node-wit').Wit;
@@ -45,9 +46,9 @@ const PORT = process.env.PORT || 8445;
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
 // Setting up our bot
 const wit = new Wit({
-  accessToken: WIT_TOKEN,
-  actions,
-  logger: new log.Logger(log.INFO)
+    accessToken: WIT_TOKEN,
+    actions,
+    logger: new log.Logger(log.INFO)
 });
 
 const findOrCreateSession = (fbid) => {
@@ -62,7 +63,7 @@ const findOrCreateSession = (fbid) => {
     if (!sessionId) {
         // No session found for user fbid, let's create a new one
         sessionId = new Date().toISOString();
-        sessions[sessionId] = { fbid: fbid, context: {} };
+        sessions[sessionId] = {fbid: fbid, context: {}};
     }
     return sessionId;
 };
@@ -120,7 +121,7 @@ app.post('/webhook/', function (req, res) {
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if ( event.message ) {
+        if (event.message) {
             const response = parser(event);
             sendTextMessage(sender, response);
 
@@ -138,9 +139,9 @@ app.post('/webhook/', function (req, res) {
                 // Based on the session state, you might want to reset the session.
                 // This depends heavily on the business logic of your bot.
                 // Example:
-                // if (context['done']) {
-                //   delete sessions[witSession];
-                // }
+                if (context['done']) {
+                  delete sessions[witSession];
+                }
 
                 // Updating the user's current session state
                 sessions[witSession].context = context;
@@ -157,5 +158,3 @@ app.post('/webhook/', function (req, res) {
 app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'))
 });
-
-const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
