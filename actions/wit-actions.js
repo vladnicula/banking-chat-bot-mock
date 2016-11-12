@@ -77,7 +77,8 @@ const actions = (fbMessage, sessions) => {
         },
 
         sayHello(request) {
-            const sender = userService.getUserByChatId(sessions[request.sessionId].fbid);
+            const {fbid:senderId} = sessions[request.sessionId];
+            const sender = userService.getUserByChatId(senderId);
             return fbMessage(senderId, {text: `Hello there ${sender.name}. What can I help you with?`});
         },
 
