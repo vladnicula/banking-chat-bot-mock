@@ -46,7 +46,7 @@ const fbMessage = (id, message) => {
 const registerWelcomeScreen = () => {
     const body = JSON.stringify({
         "setting_type":"greeting",
-        greeting: `Hello there ${sender.name}. What can I help you with?`
+        greeting: `Hello there. What can I help you with?`
     });
 
     const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
