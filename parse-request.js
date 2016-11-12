@@ -1,7 +1,7 @@
 'use strict';
 
 const parseRequest = (event) => {
-    let response = {text: JSON.stringify(event)};
+    let defaultResponse = {text: JSON.stringify(event)};
     const attachments = event.message.attachments;
 
     // Handle location
@@ -10,7 +10,7 @@ const parseRequest = (event) => {
         const currentLocation = `${attachments[0].payload.coordinates.lat},${attachments[0].payload.coordinates.long}`;
         const directionsUrl = `http://www.google.com/maps/dir/${currentLocation}/${ATMLocation}`;
 
-        response = {
+        return {
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -30,7 +30,14 @@ const parseRequest = (event) => {
         }
     }
 
-    return response;
+    if (event.message.text == 'get location') {
+        return {
+            "text": "Please share your location:",
+            "quick_replies": [{"content_type": "location"}]
+        }
+    }
+
+    return defaultResponse;
 };
 
 // const msg = {
