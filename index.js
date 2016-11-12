@@ -9,6 +9,11 @@ const parser = require('./parse-request');
 
 app.set('port', (process.env.PORT || 5000));
 
+const USER_CHAT_IDS = {
+	'Raul': '981647388611508',
+	'Vlad': '1221584201246326'
+};
+
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
 
