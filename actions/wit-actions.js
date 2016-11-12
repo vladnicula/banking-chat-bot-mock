@@ -67,13 +67,15 @@ const actions = (fbMessage, sessions) => {
             const {fbid:senderId} = sessions[request.sessionId];
             const {entities} = request;
             const senderUser = userService.getUserByChatId(senderId);
-            let text = senderUser.balance;
+            let balance = senderUser.balance;
+            let type = 'current';
 
             if (entities && entities.ownAccount && entities.ownAccount[0].value === "savings") {
-                text = senderUser.balanceSavings;
+                balance = senderUser.balanceSavings;
+                type = 'savings';
             }
 
-            return fbMessage(senderId, {text});
+            return fbMessage(senderId, {text: `Your ${type} balance is: ${balance}`});
         },
 
         sayHello(request) {
