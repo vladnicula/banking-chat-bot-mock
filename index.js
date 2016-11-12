@@ -21,10 +21,10 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 const sessions = {};
 
 /** Helper function to send a Facebook Message */
-const fbMessage = (id, text) => {
+const fbMessage = (id, message) => {
     const body = JSON.stringify({
         recipient: {id},
-        message: { text: text }
+        message
     });
     const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
     return fetch('https://graph.facebook.com/me/messages?' + qs, {
