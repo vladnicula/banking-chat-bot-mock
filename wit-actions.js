@@ -12,7 +12,7 @@ const actions = (fbMessage, sessions) => {
                 // Yay, we found our recipient!
                 // Let's forward our bot response to her.
                 // We return a promise to let our bot know when we're done sending
-                return fbMessage(recipientId, text)
+                return fbMessage(recipientId, {text})
                     .then(() => null)
                     .catch((err) => {
                         console.error(
