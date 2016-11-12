@@ -13,21 +13,25 @@ const isTemporarySendRequest = (message='') => {
 	return USER_CHAT_IDS[name];
 };
 
-function requestMoneySendAction(senderIdentifer, messageText, sendTextMessage) {
+function requestMoneySendAction(senderIdentifer, messageText, fbSendTextMessage) {
 	const [ammount, name] = messageText.split(' ');
 	const message = `Hey ${name}, ${senderIdentifer} want's to send \$${ammount} to you.`;
-	const quickActions = ['accept', 'reject'];
+	const quickActions = ['accept', 'reject'].map((name)=>({
+		"content_type":"text",
+		"title":name,
+		"payload":name
+	}));
 
 	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name], {
     	"text": message,
     	"quick_replies": quickActions
     });
 
-	sendTextMessage(USER_CHAT_IDS[name], {
+	fbSendTextMessage(USER_CHAT_IDS[name], {
         "text": message,
         "quick_replies": quickActions
     }).catch((err)=>{
-    	console.error(err);
+    	console.error(err)
     });
 }
 
