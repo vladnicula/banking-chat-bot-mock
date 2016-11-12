@@ -1,5 +1,4 @@
-const sessions = {}
-
+const sessions = {};
 
 const findOrCreateSession = (fbid) => {
     let sessionId;
@@ -21,8 +20,8 @@ const findOrCreateSession = (fbid) => {
 
 module.exports = {
     getSenderId(sessionId) {
-      return sessions[sessionId].fbid
+        return sessions[sessionId].fbid
     },
     getSession: findOrCreateSession,
-    getSessions: () => sessions,
-}
+    getSessions: () => sessions
+};

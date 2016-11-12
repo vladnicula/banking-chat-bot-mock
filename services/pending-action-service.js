@@ -4,46 +4,46 @@ const pendingActionsByUserId = {};
 const uuid = require('uuid');
 
 const pendingActionService = {
-	registerPendingAction: (actionDescriptor, sourceUserId, targetUserId) => {
-		const actionId = `pa-${Date.now()}-${uuid()}`;
+    registerPendingAction: (actionDescriptor, sourceUserId, targetUserId) => {
+        const actionId = `pa-${Date.now()}-${uuid()}`;
 
-		pendingActionsById[actionId] = Object.assign(
-			{id: actionId}, actionDescriptor, {targetUserId, sourceUserId}
-		);
+        pendingActionsById[actionId] = Object.assign(
+            {id: actionId}, actionDescriptor, {targetUserId, sourceUserId}
+        );
 
-		if (!pendingActionsByUserId[targetUserId]) {
-			pendingActionsByUserId[targetUserId] = [];	
-		}
+        if (!pendingActionsByUserId[targetUserId]) {
+            pendingActionsByUserId[targetUserId] = [];
+        }
 
-		pendingActionsByUserId[targetUserId].push(actionId);
+        pendingActionsByUserId[targetUserId].push(actionId);
 
-		return actionId;
-	},
+        return actionId;
+    },
 
-	resolvePendingAction: (actionId) => {
+    resolvePendingAction: (actionId) => {
 
-		if ( !pendingActionsById[actionId] ) {
-			return;
-		}
+        if (!pendingActionsById[actionId]) {
+            return;
+        }
 
-		const {targetUserId} = pendingActionsById[actionId];
+        const {targetUserId} = pendingActionsById[actionId];
 
-		const indexOfActionId = pendingActionsByUserId[targetUserId].indexOf(actionId);
+        const indexOfActionId = pendingActionsByUserId[targetUserId].indexOf(actionId);
 
-		pendingActionsByUserId[targetUserId] = []
-			.concat(pendingActionsByUserId[targetUserId].slice(0, indexOfActionId))
-			.concat(pendingActionsByUserId[targetUserId].slice(indexOfActionId+1));
+        pendingActionsByUserId[targetUserId] = []
+            .concat(pendingActionsByUserId[targetUserId].slice(0, indexOfActionId))
+            .concat(pendingActionsByUserId[targetUserId].slice(indexOfActionId + 1));
 
-		delete pendingActionsById[actionId];
-	},
+        delete pendingActionsById[actionId];
+    },
 
-	getActionById: (actionId) => {
-		return pendingActionsById[actionId];
-	},
+    getActionById: (actionId) => {
+        return pendingActionsById[actionId];
+    },
 
-	getPendingActionsByUserId: (clientId) => {
-		return (pendingActionsByUserId[clientId]||[]).map(pendingActionService.getActionById);
-	}
+    getPendingActionsByUserId: (clientId) => {
+        return (pendingActionsByUserId[clientId] || []).map(pendingActionService.getActionById);
+    }
 };
 
 module.exports = pendingActionService;

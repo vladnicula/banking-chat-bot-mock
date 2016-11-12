@@ -1,6 +1,7 @@
 'use strict';
 
-const {requestMoneySendAction} = require('./actions/request-money-send');
+const {requestMoneySendAction} = require('./request-money-send');
+const userService = require('../services/user-service');
 
 const actions = (fbMessage, sessions) => {
     return {
@@ -65,6 +66,15 @@ const actions = (fbMessage, sessions) => {
         /** Triggered when a user wants to check their account balance */
         getBalance() {
             return Promise.resolve(null);
+        },
+
+        /** Triggered when user wants to transfer money from one of their accounts to another */
+        transferBetweenAccounts(request) {
+            const {fbid:senderId} = sessions[request.sessionId];
+            const senderUser = userService.getUserByChatId(senderId);
+            return fbMessage(senderId, {
+                "text": senderUser.balance
+            });
         },
 
         done(request) {
