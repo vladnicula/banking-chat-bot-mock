@@ -1,8 +1,8 @@
 'use strict';
 
-const {acceptActionByUser} = require('./actions/request-money-send');
-const userService = require('./services/user-service');
-const pendingActionService = require('./services/pending-action-service');
+const {acceptActionByUser} = require('./request-money-send');
+const userService = require('../services/user-service');
+const pendingActionService = require('../services/pending-action-service');
 
 const staticActions = (event, fbSend) => {
     const attachments = event.message.attachments;
