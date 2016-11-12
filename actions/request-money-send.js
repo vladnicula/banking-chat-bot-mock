@@ -27,7 +27,7 @@ function requestMoneySendAction(senderIdentifer, messageText, fbSendTextMessage)
     	"quick_replies": quickActions
     });
 
-	fbSendTextMessage(USER_CHAT_IDS[name], {
+	fbSendTextMessage(USER_CHAT_IDS[name].chatId, {
         "text": message,
         "quick_replies": quickActions
     }).catch((err)=>{
