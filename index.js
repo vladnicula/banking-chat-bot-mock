@@ -112,8 +112,9 @@ app.post('/webhook/', function (req, res) {
         const sender = event.sender.id;
 
          if ( event.message && isTemporarySendRequest(event.message.text) ) {
-            console.log('should handle special flow case, not beginning of new flow');
-            return requestMoneySendAction(sender, event.message.text, sendTextMessage);
+            requestMoneySendAction(sender, event.message.text, sendTextMessage);
+            res.sendStatus(200);
+            return;
         }
 
 
