@@ -35,15 +35,15 @@ const actions = (fbMessage, sessions) => {
 
             const {sessionId, entities} = request;
             console.log(entities);
-            const {value:ammout} = entities.amount_of_money[0];
+            const {value:ammount} = entities.amount_of_money[0];
             const {value:type} = entities.transferMoney[0];
             const {value:targetName} = entities.contact[0];
 
             const {fbid:senderId} = sessions[sessionId];
 
-            console.log('pending send', {senderId, ammout, type, targetName});
+            console.log('pending send', {senderId, ammount, type, targetName});
 
-            return requestMoneySendAction(senderId, {ammout, type, targetName}, fbMessage)
+            return requestMoneySendAction(senderId, {ammount, type, targetName}, fbMessage)
                 .then(()=>{
                     request.context.contact = request.entities.contact.value;
                     request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
