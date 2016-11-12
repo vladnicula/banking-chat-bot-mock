@@ -58,17 +58,25 @@ app.post('/webhook/', function (req, res) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
         if (event.message && event.message.text) {
+        	const coordinates = event.message.attachments.payload.coordinates;
             let text = event.message.text;
-            textrazor(text, function (operation, money, people) {
-                const message = `
+            try {
+				textrazor(text, function (operation, money, people) {
+const message = `
 The operation to do is: ${operation}.
 Sum & currency: ${money[0].sum} ${money[0].currency}.
 People involved: ${people}
 `;
-                console.log(event.message);
-                const coordinates = event.message.attachments.payload.coordinates;
-                sendTextMessage(sender, "Text received, echo: " + coordinates);
-            });
+				
+					sendTextMessage(sender, message.substring(0, 200));
+	            });
+			}	
+            catch (err) {
+            	console.log('textrazor err', err);
+            	sendTextMessage(sender, 'Huston, we have a problem: '+err.toString());
+            }
+
+
         }
     }
     res.sendStatus(200)

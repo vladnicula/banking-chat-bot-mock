@@ -14,7 +14,7 @@ var parseResponse = (err, res, body, callback) => {
         var res = JSON.parse(body).response;
 
         // Search for the entities
-        res.entities.forEach((entity) => {
+        ((res || {}).entities || []).forEach((entity) => {
             // TODO: take into consideration also confidenceScore? >= 0.5?
 
             if (entity.type.indexOf('Person') > -1) {
