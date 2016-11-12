@@ -69,8 +69,7 @@ const actions = (fbMessage, sessions) => {
             const senderUser = userService.getUserByChatId(senderId);
             let text = senderUser.balance;
 
-            console.log(entities, entities.ownAccount, entities.ownAccount[0]);
-            if (entities && entities.ownAccount[0] && entities.ownAccount[0] === "savings") {
+            if (entities && entities.ownAccount[0] && entities.ownAccount[0].value === "savings") {
                 text = senderUser.balanceSavings;
             }
 
