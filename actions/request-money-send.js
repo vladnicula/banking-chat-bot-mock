@@ -22,7 +22,7 @@ function requestMoneySendAction(senderIdentifer, messageText, fbSendTextMessage)
 		"payload":name
 	}));
 
-	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name], {
+	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name].chatId, {
     	"text": message,
     	"quick_replies": quickActions
     });
