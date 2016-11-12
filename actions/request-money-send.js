@@ -53,7 +53,7 @@ function acceptActionByUser ( senderChatId, fbSendTextMessage ) {
       .then( () => {
         return Promise.all([
           fbSendTextMessage( userService.getUserById(targetUserId).chatId, {
-            "text": `Successfuly sent money to ${userService.getUserById(sourceUserId).name}`
+            "text": `Successfuly received money from ${userService.getUserById(sourceUserId).name}`
           }),
 
           fbSendTextMessage( userService.getUserById(sourceUserId).chatId, {
