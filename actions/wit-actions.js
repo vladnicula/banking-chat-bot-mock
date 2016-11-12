@@ -65,6 +65,7 @@ const actions = (fbMessage, sessions) => {
 
         /** Triggered when a user wants to check their account balance */
         getBalance(request) {
+            console.log(request);
             const {fbid:senderId} = sessions[request.sessionId];
             const senderUser = userService.getUserByChatId(senderId);
             return fbMessage(senderId, {"text": senderUser.balance});
