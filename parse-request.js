@@ -9,7 +9,7 @@ const parseRequest = (event) => {
         const long = event.message.attachments[0].payload.coordinates.long;
 
         const ATMLocation = '46.771450,23.626898';
-        const directionsUrl = `https://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
+        const directionsUrl = `http://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
 
         response = {
             "attachment": {
@@ -20,11 +20,11 @@ const parseRequest = (event) => {
                         "title": "Directions to nearest ATM",
                         "image_url": "http:\/\/maps.googleapis.com\/maps\/api\/staticmap?size=764x400&center=46.771450,23.626898&zoom=15&markers=46.771450,23.626898",
                         "item_url": `http:\/\/maps.apple.com\/maps?q=${ATMLocation}&z=16`,
-                        "buttons": {
+                        "buttons": [{
                             'type': 'web_url',
                             'url': directionsUrl,
                             'title': 'Directions'
-                        }
+                        }]
                     }]
                 }
             }
