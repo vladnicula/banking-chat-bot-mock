@@ -1,6 +1,7 @@
 'use strict';
 
 const {acceptActionByUser} = require('./actions/request-money-send');
+const userService = require('./services/user-service'); 
 const pendingActionService = require('./services/pending-action-service'); 
 
 const staticActions = (event, fbSend) => {
@@ -36,7 +37,7 @@ const staticActions = (event, fbSend) => {
 
     if ( 
         event.message.text.toLowerCase() === 'accept' 
-        && pendingActionService.getPendingActionsByUserId(senderId).length ) {
+        && pendingActionService.getPendingActionsByUserId(userService.getByChatId(senderId).id).length ) {
 
         return acceptActionByUser(senderId, fbSend);
     }

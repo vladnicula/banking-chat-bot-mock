@@ -1,6 +1,5 @@
 const userService = require('../services/user-service');
 
-
 const USERS = [
 	{ name:'Raul', chatId:'981647388611508', currentAmmount: 1250.18},
 	{ name:'Vlad', chatId:'1221584201246326', currentAmmount: 322.53},
