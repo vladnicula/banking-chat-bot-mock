@@ -26,6 +26,7 @@ const actions = (fbMessage, sessions) => {
                 return Promise.resolve()
             }
         },
+
         findATM(request) {
             const sessionId = request.sessionId;
             const recipientId = sessions[sessionId].fbid;

@@ -7,17 +7,9 @@ const fetch = require('node-fetch');
 const app = express();
 const parser = require('./parse-request');
 
-const persistenceService = require('./persistence-service');
-
 app.set('port', (process.env.PORT || 5000));
 
-const USER_CHAT_IDS = {
-	'Raul': '981647388611508',
-	'Vlad': '1221584201246326',
-	'Bogdan': '1325850250780262',
-	'Horia': '1203276786414242',
-	'Vivianne': '1130662566983525'
-};
+const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
 
 // This will contain all user sessions.
 // Each session has an entry:
@@ -117,13 +109,14 @@ app.post('/webhook/', function (req, res) {
     for (let i = 0; i < messaging_events.length; i++) {
         const event = req.body.entry[0].messaging[i];
         const sender = event.sender.id;
-        const witSession = findOrCreateSession(sender);
 
-        const session = persistenceService.getSessionOfUserId(sender);
-
-        if ( session.flowState !== null ) {
-        	console.log('should handle special flow case, not beginning of new flow');
+         if ( event.message && isTemporarySendRequest(event.message.text) ) {
+            console.log('should handle special flow case, not beginning of new flow');
+            return requestMoneySendAction(sender, event.message.text, sendTextMessage);
         }
+
+
+        const witSession = findOrCreateSession(sender);
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 

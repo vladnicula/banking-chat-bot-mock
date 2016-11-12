@@ -1,0 +1,9 @@
+const USER_CHAT_IDS = {
+	'Raul': '981647388611508',
+	'Vlad': '1221584201246326',
+	'Bogdan': '1325850250780262',
+	'Horia': '1203276786414242',
+	'Vivianne': '1130662566983525'
+};
+
+module.exports = USER_CHAT_IDS;
