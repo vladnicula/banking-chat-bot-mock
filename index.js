@@ -18,6 +18,7 @@ const USER_CHAT_IDS = {
 	'Horia': '1203276786414242',
 	'Vivianne': '1130662566983525'
 };
+const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 // This will contain all user sessions.
 // Each session has an entry:
@@ -29,7 +30,7 @@ const fbMessage = (id, text) => {
     recipient: { id },
     message: { text },
   });
-  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
+  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
   return fetch('https://graph.facebook.com/me/messages?' + qs, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -164,5 +165,3 @@ app.post('/webhook/', function (req, res) {
 app.listen(app.get('port'), function () {
     console.log('running on port', app.get('port'))
 });
-
-const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
