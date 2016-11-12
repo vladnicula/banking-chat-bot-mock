@@ -58,10 +58,9 @@ app.post('/webhook/', function (req, res) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
         if (event.message && event.message.text) {
-        	console.log(event);
-
-        	const coordinates = event.message.attachments.payload.coordinates;
+        	// const coordinates = event.message.attachments.payload.coordinates;
             let text = event.message.text;
+            console.log('JSON.stringify(event)', JSON.stringify(event));
             sendTextMessage(sender, JSON.stringify(event));
 //             try {
 // 				textrazor(text, function (operation, money, people) {
