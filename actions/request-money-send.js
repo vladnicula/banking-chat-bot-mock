@@ -3,9 +3,9 @@ const USER_CHAT_IDS = require('../data/user-chat-ids');
 const isTemporarySendRequest = (message) => {
 	const parts = message.split(' ');
 
-	console.log('isTemporarySendRequest', message, parts.lenght, USER_CHAT_IDS[parts[1]]);
+	console.log('isTemporarySendRequest', message, parts.length, USER_CHAT_IDS[parts[1]]);
 
-	if ( parts.lenght !== 2 ) {
+	if ( parts.length !== 2 ) {
 		return false;
 	}
 
