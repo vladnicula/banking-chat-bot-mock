@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const fetch = require('node-fetch');
 const app = express();
-const parser = require('./parse-request');
+const handleStaticActions = require('./static-actions');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -39,15 +39,14 @@ const fbMessage = (id, text) => {
 
 const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
-const actions = require('./actions')(fbMessage, sessions);
-// Webserver parameter
-const PORT = process.env.PORT || 8445;
+const witActions = require('./wit-actions')(fbMessage, sessions);
+
 // Wit.ai parameters
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
 // Setting up our bot
 const wit = new Wit({
     accessToken: WIT_TOKEN,
-    actions,
+    witActions,
     logger: new log.Logger(log.INFO)
 });
 
@@ -123,10 +122,14 @@ app.post('/webhook/', function (req, res) {
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
         if (event.message) {
-            const response = parser(event);
-            if (response) {
-                sendTextMessage(sender, response);
-            } else {
+
+            // See if the message can be handled without WIT (e.g location sharing)
+            const handled = handleStaticActions(event);
+            if (handled) {
+                fbMessage(sender, handled);
+            }
+            // Else, handle it with WIT
+            else {
                 // Let's forward the message to the Wit.ai Bot Engine
                 // This will run all actions until our bot has nothing left to do
                 wit.runActions(
