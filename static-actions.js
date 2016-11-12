@@ -35,11 +35,12 @@ const staticActions = (event, fbSend) => {
 
     console.log('is this accept?', event.message.text.toLowerCase(), event.message.text.toLowerCase() === 'accept');
 
+    const sendingUserInternalId = userService.getUserByChatId(senderId).id);
     if ( 
         event.message.text.toLowerCase() === 'accept' 
-        && pendingActionService.getPendingActionsByUserId(userService.getUserByChatId(senderId).id).length ) {
+        && pendingActionService.getPendingActionsByUserId(sendingUserInternalId).length ) {
 
-        return acceptActionByUser(senderId, fbSend);
+        return acceptActionByUser(sendingUserInternalId, fbSend);
     }
 
     return null;
