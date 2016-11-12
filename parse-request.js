@@ -3,12 +3,28 @@
 const parseRequest = (event) => {
     let response = JSON.stringify(event);
 
+    // Handle location
     if (event.message.attachments && event.message.attachments[0].payload.coordinates) {
         const lat = event.message.attachments[0].payload.coordinates.lat;
         const long = event.message.attachments[0].payload.coordinates.long;
 
         const ATMLocation = '46.771450,23.626898';
-        response = `https://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
+        //response = `https://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
+        response = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": {
+                        "element": {
+                            "title": "Your current location",
+                            "image_url": "https:\/\/maps.googleapis.com\/maps\/api\/staticmap?size=764x400&center=" + lat + "," + long + "&zoom=25&markers=" + lat + "," + long,
+                            "item_url": "http:\/\/maps.apple.com\/maps?q=" + lat + "," + long + "&z=16"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     return response;
