@@ -91,11 +91,16 @@ app.get('/webhook/', function (req, res) {
 
 /** Handle incoming messages */
 app.post('/webhook/', function (req, res) {
-    let messaging_events = req.body.entry[0].messaging;
-    for (let i = 0; i < messaging_events.length; i++) {
-        const event = req.body.entry[0].messaging[i];
-        const sender = event.sender.id;
 
+    const data = req.body;
+
+  if (data.object === 'page') {
+    data.entry.forEach(entry => {
+      entry.messaging.forEach(event => {
+        if (event.message && !event.message.is_echo) {
+          // Yay! We got a new message!
+          // We retrieve the Facebook user 
+           const sender = event.sender.id;
          if ( event.message && isTemporarySendRequest(event.message.text) ) {
             requestMoneySendAction(sender, event.message.text, fbMessage);
             res.sendStatus(200);
@@ -106,41 +111,46 @@ app.post('/webhook/', function (req, res) {
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if (event.message && typeof event.message === 'string') {
+          if (event.message && typeof event.message === 'string') {
 
-            // See if the message can be handled without WIT (e.g location sharing)
-            const handled = handleStaticActions(event);
-            if (handled) {
-                fbMessage(sender, handled);
-            }
-            // Else, handle it with WIT
-            else {
-                // Let's forward the message to the Wit.ai Bot Engine
-                // This will run all actions until our bot has nothing left to do
-                wit.runActions(
-                    witSession, // the user's current session
-                    event.message, // the user's message
-                    sessions[witSession].context // the user's current session state
-                ).then((context) => {
-                    // Our bot did everything it has to do.
-                    // Now it's waiting for further messages to proceed.
-                    console.log('Waiting for next user messages');
+              // See if the message can be handled without WIT (e.g location sharing)
+              const handled = handleStaticActions(event);
+              if (handled) {
+                  fbMessage(sender, handled);
+              }
+              // Else, handle it with WIT
+              else {
+                  // Let's forward the message to the Wit.ai Bot Engine
+                  // This will run all actions until our bot has nothing left to do
+                  wit.runActions(
+                      witSession, // the user's current session
+                      event.message, // the user's message
+                      sessions[witSession].context // the user's current session state
+                  ).then((context) => {
+                      // Our bot did everything it has to do.
+                      // Now it's waiting for further messages to proceed.
+                      console.log('Waiting for next user messages');
 
-                    // Based on the session state, you might want to reset the session.
-                    // This depends heavily on the business logic of your bot.
-                    // Example:
-                    if (context['done']) {
-                        delete sessions[witSession];
-                    }
+                      // Based on the session state, you might want to reset the session.
+                      // This depends heavily on the business logic of your bot.
+                      // Example:
+                      if (context['done']) {
+                          delete sessions[witSession];
+                      }
 
-                    // Updating the user's current session state
-                    sessions[witSession].context = context;
-                }).catch((err) => {
-                    console.error('Oops! Got an error from Wit: ', err.stack || err);
-                });
-            }
+                      // Updating the user's current session state
+                      sessions[witSession].context = context;
+                  }).catch((err) => {
+                      console.error('Oops! Got an error from Wit: ', err.stack || err);
+                  });
+              }
+          }
+  
         }
-    }
+      })
+    })
+  }
+        
     res.sendStatus(200);
 });
 
