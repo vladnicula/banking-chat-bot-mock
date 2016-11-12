@@ -49,7 +49,7 @@ function acceptActionByUser ( senderChatId, fbSendTextMessage ) {
   if ( type === 'send' ) {
     return userService
       .sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
-      .then(pendingActions.resolvePendingAction(actionId))
+      .then(pendingActionService.resolvePendingAction(actionId))
       .then( () => {
         return Promise.all([
           fbSendTextMessage( userService.getUserById(targetUserId).chatId, {
