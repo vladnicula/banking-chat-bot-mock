@@ -59,9 +59,10 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
+
+        if (event.message && (event.message.text || event.message.location)) {
         sendTextMessage(sender, JSON.stringify(event));
-        
-//         if (event.message && event.message.text) {
+        	
 //         	// const coordinates = event.message.attachments.payload.coordinates;
 //             let text = event.message.text;
             
