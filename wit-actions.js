@@ -34,13 +34,14 @@ const actions = (fbMessage, sessions) => {
         pendingSend (request) {
 
             const {sessionId, entities} = request;
+            console.log(entities);
             const {value:ammout} = entities.amount_of_money[0];
             const {value:type} = entities.transferMoney[0];
             const {value:targetName} = entities.contact[0];
 
             const {fbid:senderId} = sessions[sessionId];
 
-            console.log('pendign send', {senderId, ammout, type, targetName});
+            console.log('pending send', {senderId, ammout, type, targetName});
 
             return requestMoneySendAction(senderId, {ammout, type, targetName}, fbMessage)
                 .then(()=>{

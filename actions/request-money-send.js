@@ -10,7 +10,7 @@ function requestMoneySendAction( senderChatId, {ammount, type, targetName}, fbSe
 	const targetUser = userService.getUserByName(targetName);
 	const senderUser = userService.getUserByChatId(senderChatId);
 
-	const message = `Hey ${name}, ${senderUser.name} want's to send \$${ammount} to you.`;
+	const message = `Hey ${targetName}, ${senderUser.name} want's to send \$${ammount} to you.`;
 
 	const actionId = pendingActionService.registerPendingAction({
 		ammount: parseFloat(ammount, 10),

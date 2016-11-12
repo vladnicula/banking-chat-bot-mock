@@ -22,7 +22,7 @@ const userService = {
 	},
 
 	getUserByChatId: (userChatId) => {
-		return userService.getUserById(usersByChatId[userChatId])
+		return userService.getUserById(usersByChatId[userChatId]);
 	},
 
 	getUserByName: (name) => {
