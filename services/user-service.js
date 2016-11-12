@@ -22,16 +22,16 @@ const userService = {
 	},
 
 	getUserByChatId: (userChatId) => {
-		return this.getUserById(usersByChatId[userChatId])
+		return userService.getUserById(usersByChatId[userChatId])
 	},
 
 	getUserByName: (name) => {
-		return this.getUserById(usersByName[name]);
+		return userService.getUserById(usersByName[name]);
 	},
 
 	sendMoneyBetweenUsersByIds: (sourceId, targetId, ammount) => {
-		const sourceUser = this.getUserById(sourceId);
-		const targetUser = this.getUserById(targetId);
+		const sourceUser = userService.getUserById(sourceId);
+		const targetUser = userService.getUserById(targetId);
 		sourceUser.balance -= ammount;
 		targetUser.balance += ammount;
 		return Promise.resolve();
