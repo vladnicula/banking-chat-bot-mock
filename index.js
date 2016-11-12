@@ -105,6 +105,7 @@ app.post('/webhook/', function (req, res) {
          if ( event.message && isTemporarySendRequest(event.message.text) ) {
             requestMoneySendAction(sender, event.message.text, fbMessage);
             res.sendStatus(200);
+            console.log('___ intra in isTemporarySendRequest ___ ')
             return;
         }
 
