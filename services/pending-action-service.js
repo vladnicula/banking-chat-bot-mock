@@ -11,7 +11,7 @@ module.exports = {
 			{id: actionId}, actionDescriptor, {targetUserId, sourceUserId}
 		);
 
-		if (pendingActionsByUserId[targetUserId]) {
+		if (!pendingActionsByUserId[targetUserId]) {
 			pendingActionsByUserId[targetUserId] = [];	
 		}
 
