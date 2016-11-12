@@ -129,9 +129,9 @@ app.post('/webhook/', function (req, res) {
                     // Based on the session state, you might want to reset the session.
                     // This depends heavily on the business logic of your bot.
                     // Example:
-                    if (context['done']) {
-                        delete sessions[witSession];
-                    }
+                    // if (context['done']) {
+                    //     delete sessions[witSession];
+                    // }
 
                     // Updating the user's current session state
                     sessions[witSession].context = context;
