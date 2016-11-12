@@ -17,7 +17,7 @@ const parseRequest = (event) => {
                     "template_type": "generic",
                     "elements": [{
                         "title": "Directions to nearest ATM",
-                        "image_url": "http:\/\/maps.googleapis.com\/maps\/api\/staticmap?size=764x400&center=${ATMLocation}&zoom=15&markers=${ATMLocation}",
+                        "image_url": `http:\/\/maps.googleapis.com\/maps\/api\/staticmap?size=764x400&center=${ATMLocation}&zoom=15&markers=${ATMLocation}`,
                         "item_url": `http:\/\/maps.apple.com\/maps?q=${ATMLocation}&z=16`,
                         "buttons": [{
                             'type': 'web_url',
