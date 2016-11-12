@@ -54,7 +54,7 @@ const actions = (fbMessage, sessions) => {
             //         }]
             //     }
             // }
-            // console.log(JSON.stringify(request));
+            console.log(JSON.stringify(request.entities));
             const {sessionId, entities} = request;
             const {value:ammout} = entities.amount_of_money;
             const {value:type} = entities.transferMoney;
