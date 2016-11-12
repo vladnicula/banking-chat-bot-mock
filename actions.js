@@ -36,6 +36,11 @@ const actions = (fbMessage, sessions) => {
                 "text": "Please share your location:",
                 "quick_replies": [{"content_type": "location"}]
             });
+        },
+
+        done(request) {
+            request.context.done = true;
+            return Promise.resolve(null);
         }
     }
 };
