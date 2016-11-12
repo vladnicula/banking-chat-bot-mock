@@ -25,22 +25,25 @@ const actions = (fbMessage, sessions) => {
             } else {
                 console.error('Oops! Couldn\'t find user for session:', sessionId);
                 // Giving the wheel back to our bot
-                return Promise.resolve()
+                return Promise.resolve(null)
             }
         },
 
         findATM(request) {
             const sessionId = request.sessionId;
             const recipientId = sessions[sessionId].fbid;
-            return fbMessage(recipientId, {
+            const context = request.context
+            fbMessage(recipientId, {
                 "text": "Please share your location:",
                 "quick_replies": [{"content_type": "location"}]
             });
+
+            return Promise.resolve(context);
         },
 
         done(request) {
             request.context.done = true;
-            return Promise.resolve(null);
+            return resolve({ done });
         }
     }
 };
