@@ -111,7 +111,7 @@ app.post('/webhook/', function (req, res) {
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-          if (event.message) {
+          if (event.message && typeof event.message === 'string') {
 
               // See if the message can be handled without WIT (e.g location sharing)
               const handled = handleStaticActions(event);
@@ -124,7 +124,7 @@ app.post('/webhook/', function (req, res) {
                   // This will run all actions until our bot has nothing left to do
                   wit.runActions(
                       witSession, // the user's current session
-                      event.message, // the user's message
+                      event.message.text, // the user's message
                       sessions[witSession].context // the user's current session state
                   ).then((context) => {
                       // Our bot did everything it has to do.
