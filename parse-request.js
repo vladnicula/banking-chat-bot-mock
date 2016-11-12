@@ -1,3 +1,5 @@
+'use strict';
+
 const parseRequest = (event) => {
     let response = JSON.stringify(event);
 
