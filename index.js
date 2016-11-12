@@ -122,7 +122,7 @@ app.post('/webhook/', function (req, res) {
               }
               // Else, handle it with WIT
               else {
-                  console.warn('_____wit as seen these___')
+                  console.log('_____wit as seen these___')
                   // Let's forward the message to the Wit.ai Bot Engine
                   // This will run all actions until our bot has nothing left to do
                   wit.runActions(
