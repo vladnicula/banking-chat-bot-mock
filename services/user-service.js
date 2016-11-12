@@ -5,7 +5,7 @@ const usersByFacebookId = {};
 
 const uuid = require('uuid');
 
-module.exports = {
+const userService = {
 	registerNewUser: (userDetails) => {
 		const userId = `user-${Date.now()}-${uuid()}`;
 		const {name, facebookId, chatId} = userDetails;
@@ -30,11 +30,13 @@ module.exports = {
 	},
 
 	sendMoneyBetweenUsersByIds: (sourceId, targetId, ammount) => {
-		const sourceUser = getUserById(sourceId);
-		const targetUser = getUserById(targetId);
+		const sourceUser = this.getUserById(sourceId);
+		const targetUser = this.getUserById(targetId);
 		sourceUser.balance -= ammount;
 		targetUser.balance += ammount;
 		return Promise.resolve();
 	}
 };
+
+module.exports = userService;
 
