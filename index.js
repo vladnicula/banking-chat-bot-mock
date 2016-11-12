@@ -6,7 +6,7 @@ const request = require('request');
 const fetch = require('node-fetch');
 const app = express();
 app.set('port', (process.env.PORT || 5000));
-const handleStaticActions = require('./static-actions');
+const handleStaticActions = require('./actions/static-actions');
 const store = require('./services/store');
 
 const Wit = require('node-wit').Wit;
@@ -43,7 +43,7 @@ const fbMessage = (id, message) => {
         });
 };
 
-const witActions = require('./wit-actions')(fbMessage, store.getSessions());
+const witActions = require('./actions/wit-actions')(fbMessage, store.getSessions());
 
 
 // Wit.ai parameters

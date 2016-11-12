@@ -1,12 +1,13 @@
 'use strict';
 
 const {acceptActionByUser} = require('./actions/request-money-send');
-const userService = require('./services/user-service'); 
-const pendingActionService = require('./services/pending-action-service'); 
+const userService = require('./services/user-service');
+const pendingActionService = require('./services/pending-action-service');
 
 const staticActions = (event, fbSend) => {
     const attachments = event.message.attachments;
     const senderId = event.sender.id;
+
     // Handle location
     if (attachments && attachments[0].payload.coordinates) {
         const ATMLocation = '46.771450,23.626898';
@@ -36,8 +37,8 @@ const staticActions = (event, fbSend) => {
     console.log('is this accept?', event.message.text.toLowerCase(), event.message.text.toLowerCase() === 'accept');
 
     const sendingUserInternalId = userService.getUserByChatId(senderId).id;
-    if ( 
-        event.message.text.toLowerCase() === 'accept' 
+    if (
+        event.message.text.toLowerCase() === 'accept'
         && pendingActionService.getPendingActionsByUserId(sendingUserInternalId).length ) {
 
         return acceptActionByUser(sendingUserInternalId, fbSend);
