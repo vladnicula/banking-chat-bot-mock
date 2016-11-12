@@ -43,8 +43,22 @@ const fbMessage = (id, message) => {
         });
 };
 
-const witActions = require('./actions/wit-actions')(fbMessage, store.getSessions());
+const registerWelcomeScreen = () => {
+    const body = JSON.stringify({
+        "setting_type":"greeting",
+        greeting: `Hello there ${sender.name}. What can I help you with?`
+    });
 
+    const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
+    return fetch('https://graph.facebook.com/me/thread_settings?' + qs, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body
+    });
+};
+registerWelcomeScreen();
+
+const witActions = require('./actions/wit-actions')(fbMessage, store.getSessions());
 
 // Wit.ai parameters
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
@@ -78,9 +92,6 @@ app.get('/webhook/', function (req, res) {
 /** Handle incoming messages */
 app.post('/webhook/', function (req, res) {
 
-    if (req.query['hub.mode'] === 'subscribe') {
-        console.log('here!!!');
-    }
     const data = req.body;
 
     data.entry.forEach(entry => {
