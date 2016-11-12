@@ -3,6 +3,7 @@ var request = require('request');
 var parseResponse = (err, res, body, callback) => {
     if (err) {
         console.error(err);
+        callback(err);
         return;
     }
 
@@ -53,8 +54,6 @@ var parseResponse = (err, res, body, callback) => {
     }
 };
 
-module.exports = makeRequest;
-
 var makeRequest = (text, callback) => {
     request.post({
         method: 'POST',
@@ -68,6 +67,7 @@ var makeRequest = (text, callback) => {
     });
 };
 
+module.exports = makeRequest;
 
 // makeRequest('Transfer 100 $ to Vlad Nicula');
 // makeRequest('Receive $10 from Anna and Bogdan');

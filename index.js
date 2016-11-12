@@ -6,23 +6,29 @@ const request = require('request');
 const app = express();
 const textrazor = require('./text-analysis'); 
 
-app.set('port', (process.env.PORT || 5000))
+app.set('port', (process.env.PORT || 5000));
 
 // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Process application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am a chat bot')
-})
+	textrazor('Transfer 100 $ to Vlad Nicula', function (operation, money, people) {
+res.send(`
+The operation to do is: ${operation}.
+Sum & currency: ${money[0].sum} ${money[0].currency}.
+People involved: ${people}
+`);
+	});
+});
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-        res.send(req.query['hub.challenge'])
+        res.send(req.query['hub.challenge']);
     }
     res.send('Error, wrong token');
 })
