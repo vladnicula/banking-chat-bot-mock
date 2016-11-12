@@ -26,6 +26,8 @@ function requestMoneySendAction(senderIdentifer, messageText, sendTextMessage) {
 	sendTextMessage(USER_CHAT_IDS[name], {
         "text": message,
         "quick_replies": quickActions
+    }).catch((err)=>{
+    	console.error(err);
     });
 }
 
