@@ -76,6 +76,11 @@ const actions = (fbMessage, sessions) => {
             return fbMessage(senderId, {text});
         },
 
+        sayHello(request) {
+            const sender = userService.getUserByChatId(sessions[request.sessionId].fbid);
+            return fbMessage(senderId, {text: `Hello there ${sender.name}. What can I help you with?`});
+        },
+
         /** Triggered when user wants to transfer money from one of their accounts to another */
         transferBetweenAccounts(request) {
             const {fbid:senderId} = sessions[request.sessionId];

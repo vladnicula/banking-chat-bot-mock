@@ -78,6 +78,9 @@ app.get('/webhook/', function (req, res) {
 /** Handle incoming messages */
 app.post('/webhook/', function (req, res) {
 
+    if (req.query['hub.mode'] === 'subscribe') {
+        console.log('here!!!');
+    }
     const data = req.body;
 
     data.entry.forEach(entry => {
