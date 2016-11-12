@@ -20,12 +20,12 @@ function requestMoneySendAction(senderIdentifer, messageText, sendTextMessage) {
 
 	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name], {
     	"text": message,
-    	"quick_replies": quickAction
+    	"quick_replies": quickActions
     });
 
 	sendTextMessage(USER_CHAT_IDS[name], {
         "text": message,
-        "quick_replies": quickAction
+        "quick_replies": quickActions
     });
 }
 
