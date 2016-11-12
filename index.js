@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const textrazor = require('./text-analysis');
+const parser = require('./parse-request');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -55,18 +56,19 @@ function sendTextMessage(sender, text) {
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
     for (let i = 0; i < messaging_events.length; i++) {
-        let event = req.body.entry[0].messaging[i];
-        let sender = event.sender.id;
+        const event = req.body.entry[0].messaging[i];
+        const sender = event.sender.id;
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if (event.message && (event.message.text || event.message.location)) {
-	        sendTextMessage(sender, JSON.stringify(event));
+        if (event.message) {
+            const response = parser(event);
+            sendTextMessage(sender, response);
 	    }
 
 //         	// const coordinates = event.message.attachments.payload.coordinates;
 //             let text = event.message.text;
-            
+
 // //             try {
 // // 				textrazor(text, function (operation, money, people) {
 // // const message = `
@@ -74,10 +76,10 @@ app.post('/webhook/', function (req, res) {
 // // Sum & currency: ${money[0].sum} ${money[0].currency}.
 // // People involved: ${people}
 // // `;
-				
+
 // // 					sendTextMessage(sender, message.substring(0, 200));
 // // 	            });
-// // 			}	
+// // 			}
 // //             catch (err) {
 // //             	console.log('textrazor err', err);
 // //             	sendTextMessage(sender, 'Huston, we have a problem: '+err.toString());
