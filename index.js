@@ -57,29 +57,32 @@ app.post('/webhook/', function (req, res) {
     for (let i = 0; i < messaging_events.length; i++) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
-        if (event.message && event.message.text) {
-        	// const coordinates = event.message.attachments.payload.coordinates;
-            let text = event.message.text;
-            console.log('JSON.stringify(event)', JSON.stringify(event));
-            sendTextMessage(sender, JSON.stringify(event));
-//             try {
-// 				textrazor(text, function (operation, money, people) {
-// const message = `
-// The operation to do is: ${operation}.
-// Sum & currency: ${money[0].sum} ${money[0].currency}.
-// People involved: ${people}
-// `;
+
+        console.log('JSON.stringify(event)', JSON.stringify(event));
+        sendTextMessage(sender, JSON.stringify(event));
+        
+//         if (event.message && event.message.text) {
+//         	// const coordinates = event.message.attachments.payload.coordinates;
+//             let text = event.message.text;
+            
+// //             try {
+// // 				textrazor(text, function (operation, money, people) {
+// // const message = `
+// // The operation to do is: ${operation}.
+// // Sum & currency: ${money[0].sum} ${money[0].currency}.
+// // People involved: ${people}
+// // `;
 				
-// 					sendTextMessage(sender, message.substring(0, 200));
-// 	            });
-// 			}	
-//             catch (err) {
-//             	console.log('textrazor err', err);
-//             	sendTextMessage(sender, 'Huston, we have a problem: '+err.toString());
-//             }
+// // 					sendTextMessage(sender, message.substring(0, 200));
+// // 	            });
+// // 			}	
+// //             catch (err) {
+// //             	console.log('textrazor err', err);
+// //             	sendTextMessage(sender, 'Huston, we have a problem: '+err.toString());
+// //             }
 
 
-        }
+//         }
     }
     res.sendStatus(200)
 });
