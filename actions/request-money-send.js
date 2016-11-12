@@ -18,9 +18,14 @@ function requestMoneySendAction(senderIdentifer, messageText, sendTextMessage) {
 	const message = `Hey ${name}, ${senderIdentifer} want's to send \$${ammount} to you.`;
 	const quickActions = ['accept', 'reject'];
 
+	console.log('USER_CHAT_IDS[name]', USER_CHAT_IDS[name], {
+    	"text": message,
+    	"quick_replies": quickAction
+    });
+
 	sendTextMessage(USER_CHAT_IDS[name], {
         "text": message,
-        "quick_replies": quickActions
+        "quick_replies": quickAction
     });
 }
 

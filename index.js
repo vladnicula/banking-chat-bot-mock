@@ -112,7 +112,7 @@ app.post('/webhook/', function (req, res) {
         const sender = event.sender.id;
 
          if ( event.message && isTemporarySendRequest(event.message.text) ) {
-            requestMoneySendAction(sender, event.message.text, sendTextMessage);
+            requestMoneySendAction(sender, event.message.text, fbMessage);
             res.sendStatus(200);
             return;
         }
