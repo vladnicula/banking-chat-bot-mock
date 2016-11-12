@@ -4,6 +4,7 @@ const {requestMoneySendAction} = require('./actions/request-money-send');
 
 const actions = (fbMessage, sessions) => {
     return {
+
         send(request, response) {
             const sessionId = request.sessionId;
             const text = response.text;
@@ -31,8 +32,8 @@ const actions = (fbMessage, sessions) => {
             }
         },
 
+        /** Triggered when a user wants to send money to another */
         pendingSend (request) {
-
             const {sessionId, entities} = request;
             console.log(entities);
             const {value:ammount} = entities.amount_of_money[0];
@@ -47,10 +48,11 @@ const actions = (fbMessage, sessions) => {
                 .then(()=>{
                     request.context.contact = request.entities.contact.value;
                     request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
-                    return Promise.resolve(request.context); 
+                    return Promise.resolve(request.context);
                 });
         },
 
+        /** Triggered when user wants to find an ATM nearby */
         findATM(request) {
             const sessionId = request.sessionId;
             const recipientId = sessions[sessionId].fbid;
@@ -58,6 +60,11 @@ const actions = (fbMessage, sessions) => {
                 "text": "Please share your location:",
                 "quick_replies": [{"content_type": "location"}]
             });
+        },
+
+        /** Triggered when a user wants to check their account balance */
+        getBalance() {
+            return Promise.resolve(null);
         },
 
         done(request) {
