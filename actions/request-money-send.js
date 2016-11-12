@@ -57,7 +57,4 @@ function acceptActionByUser ( senderChatId, fbSendTextMessage ) {
 
 }
 
-module.exports = {
-	requestMoneySendAction,
-	isTemporarySendRequest
-};
+module.exports = requestMoneySendAction;
