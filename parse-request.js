@@ -1,7 +1,7 @@
 'use strict';
 
 const parseRequest = (event) => {
-    let response = JSON.stringify(event);
+    let response = {text: JSON.stringify(event)};
 
     // Handle location
     if (event.message.attachments && event.message.attachments[0].payload.coordinates) {
@@ -10,7 +10,7 @@ const parseRequest = (event) => {
 
         const ATMLocation = '46.771450,23.626898';
         //response = `https://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
-        response = JSON.stringify({
+        response = {
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -24,7 +24,7 @@ const parseRequest = (event) => {
                     }
                 }
             }
-        });
+        };
     }
 
     return response;

@@ -34,15 +34,14 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong token');
 });
 
-function sendTextMessage(sender, text) {
-    let messageData = {text: text};
+function sendTextMessage(sender, msg) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: FB_PAGE_ACCESS_TOKEN},
         method: 'POST',
         json: {
             recipient: {id: sender},
-            message: messageData
+            message: msg
         }
     }, function (error, response, body) {
         if (error) {
