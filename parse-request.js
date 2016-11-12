@@ -1,7 +1,6 @@
 'use strict';
 
 const parseRequest = (event) => {
-    let defaultResponse = {text: JSON.stringify(event)};
     const attachments = event.message.attachments;
 
     // Handle location
@@ -29,15 +28,8 @@ const parseRequest = (event) => {
             }
         }
     }
-
-    if (event.message.text == 'get location') {
-        return {
-            "text": "Please share your location:",
-            "quick_replies": [{"content_type": "location"}]
-        }
-    }
-
-    return defaultResponse;
+    
+    return null;
 };
 
 // const msg = {

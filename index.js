@@ -123,32 +123,33 @@ app.post('/webhook/', function (req, res) {
 
         if (event.message) {
             const response = parser(event);
-            sendTextMessage(sender, response);
+            if (response) {
+                sendTextMessage(sender, response);
+            } else {
+                // Let's forward the message to the Wit.ai Bot Engine
+                // This will run all actions until our bot has nothing left to do
+                wit.runActions(
+                    witSession, // the user's current session
+                    event.message, // the user's message
+                    sessions[witSession].context // the user's current session state
+                ).then((context) => {
+                    // Our bot did everything it has to do.
+                    // Now it's waiting for further messages to proceed.
+                    console.log('Waiting for next user messages');
 
-            // Let's forward the message to the Wit.ai Bot Engine
-            // This will run all actions until our bot has nothing left to do
-            wit.runActions(
-                witSession, // the user's current session
-                event.message, // the user's message
-                sessions[witSession].context // the user's current session state
-            ).then((context) => {
-                // Our bot did everything it has to do.
-                // Now it's waiting for further messages to proceed.
-                console.log('Waiting for next user messages');
+                    // Based on the session state, you might want to reset the session.
+                    // This depends heavily on the business logic of your bot.
+                    // Example:
+                    if (context['done']) {
+                        delete sessions[witSession];
+                    }
 
-                // Based on the session state, you might want to reset the session.
-                // This depends heavily on the business logic of your bot.
-                // Example:
-                if (context['done']) {
-                  delete sessions[witSession];
-                }
-
-                // Updating the user's current session state
-                sessions[witSession].context = context;
-            })
-                .catch((err) => {
+                    // Updating the user's current session state
+                    sessions[witSession].context = context;
+                }).catch((err) => {
                     console.error('Oops! Got an error from Wit: ', err.stack || err);
-                })
+                });
+            }
         }
     }
     res.sendStatus(200);
