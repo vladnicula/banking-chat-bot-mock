@@ -13,7 +13,7 @@ const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
 
 
-const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
+const {requestMoneySendAction} = require('./actions/request-money-send');
 const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
 // data layer init
@@ -90,12 +90,12 @@ app.post('/webhook/', function (req, res) {
           // Yay! We got a new message!
           // We retrieve the Facebook user 
            const sender = event.sender.id;
-         if ( event.message && isTemporarySendRequest(event.message.text) ) {
-            requestMoneySendAction(sender, event.message.text, fbMessage);
-            res.sendStatus(200);
-            console.log('___ intra in isTemporarySendRequest ___ ')
-            return;
-        }
+        //  if ( event.message && isTemporarySendRequest(event.message.text) ) {
+        //     requestMoneySendAction(sender, event.message.text, fbMessage);
+        //     res.sendStatus(200);
+        //     console.log('___ intra in isTemporarySendRequest ___ ')
+        //     return;
+        // }
 
         const witSession = store.getSession(sender);
 

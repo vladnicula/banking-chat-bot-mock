@@ -5,23 +5,8 @@ const USER_CHAT_IDS = require('../data/user-chat-ids');
 const userService = require('../services/user-service');
 const pendingActionService = require('../services/pending-action-service');
 
-const isTemporarySendRequest = (message='') => {
-	const parts = message.split(' ');
-
-	console.log('isTemporarySendRequest', {message}, parts.length, USER_CHAT_IDS[parts[1]]);
-
-	if ( parts.length !== 2 ) {
-		return false;
-	}
-
-	const name = parts[1];
-	return userService.getByName(name);
-};
-
-function requestMoneySendAction( senderChatId, messageText, fbSendTextMessage) {
-	const [ammount, name] = messageText.split(' ');
-
-	const targetUser = userService.getUserByName(name);
+function requestMoneySendAction( senderChatId, {ammount, type, targetName}, fbSendTextMessage) {
+	const targetUser = userService.getUserByName(targetName);
 	const senderUser = userService.getUserByChatId(senderChatId);
 
 	const message = `Hey ${name}, ${senderUser.name} want's to send \$${ammount} to you.`;
@@ -37,7 +22,7 @@ function requestMoneySendAction( senderChatId, messageText, fbSendTextMessage) {
 		"payload":`payment-response:${actionId}`
 	}));
 
-	fbSendTextMessage(targetUser.chatId, {
+	return fbSendTextMessage(targetUser.chatId, {
         "text": message,
         "quick_replies": quickActions
     }).catch((err)=>{
