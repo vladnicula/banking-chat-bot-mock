@@ -12,11 +12,11 @@ const persistenceService = require('./persistence-service');
 app.set('port', (process.env.PORT || 5000));
 
 const USER_CHAT_IDS = {
-	'Raul': '981647388611508',
-	'Vlad': '1221584201246326',
-	'Bogdan': '1325850250780262',
-	'Horia': '1203276786414242',
-	'Vivianne': '1130662566983525'
+    'Raul': '981647388611508',
+    'Vlad': '1221584201246326',
+    'Bogdan': '1325850250780262',
+    'Horia': '1203276786414242',
+    'Vivianne': '1130662566983525'
 };
 const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 
@@ -26,23 +26,23 @@ const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
 const sessions = {};
 
 const fbMessage = (id, text) => {
-  const body = JSON.stringify({
-    recipient: { id },
-    message: { text },
-  });
-  const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
-  return fetch('https://graph.facebook.com/me/messages?' + qs, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body,
-  })
-  .then(rsp => rsp.json())
-  .then(json => {
-    if (json.error && json.error.message) {
-      throw new Error(json.error.message);
-    }
-    return json;
-  });
+    const body = JSON.stringify({
+        recipient: {id},
+        message: text
+    });
+    const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
+    return fetch('https://graph.facebook.com/me/messages?' + qs, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body
+    })
+        .then(rsp => rsp.json())
+        .then(json => {
+            if (json.error && json.error.message) {
+                throw new Error(json.error.message);
+            }
+            return json;
+        });
 };
 
 const Wit = require('node-wit').Wit;
@@ -54,9 +54,9 @@ const PORT = process.env.PORT || 8445;
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
 // Setting up our bot
 const wit = new Wit({
-  accessToken: WIT_TOKEN,
-  actions,
-  logger: new log.Logger(log.INFO)
+    accessToken: WIT_TOKEN,
+    actions,
+    logger: new log.Logger(log.INFO)
 });
 
 const findOrCreateSession = (fbid) => {
@@ -71,7 +71,7 @@ const findOrCreateSession = (fbid) => {
     if (!sessionId) {
         // No session found for user fbid, let's create a new one
         sessionId = new Date().toISOString();
-        sessions[sessionId] = { fbid: fbid, context: {} };
+        sessions[sessionId] = {fbid: fbid, context: {}};
     }
     return sessionId;
 };
@@ -122,13 +122,13 @@ app.post('/webhook/', function (req, res) {
 
         const session = persistenceService.getSessionOfUserId(sender);
 
-        if ( session.flowState !== null ) {
-        	console.log('should handle special flow case, not beginning of new flow');
+        if (session.flowState !== null) {
+            console.log('should handle special flow case, not beginning of new flow');
         }
 
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if ( event.message ) {
+        if (event.message) {
             const response = parser(event);
             sendTextMessage(sender, response);
 
