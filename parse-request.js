@@ -10,7 +10,7 @@ const parseRequest = (event) => {
 
         const ATMLocation = '46.771450,23.626898';
         //response = `https://www.google.com/maps/dir/${lat},${long}/${ATMLocation}`;
-        response = {
+        response = JSON.stringify({
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -24,7 +24,7 @@ const parseRequest = (event) => {
                     }
                 }
             }
-        }
+        });
     }
 
     return response;
