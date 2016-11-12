@@ -56,7 +56,7 @@ const actions = (fbMessage, sessions) => {
             // }
             console.log(JSON.stringify(request));
             request.context.contact = request.entities.contact.value;
-            request.context.cash = request.entities.amount_of_money.value + request.entities.amount_of_money.unit;
+            request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
             return Promise.resolve(request.context); 
         },
 
