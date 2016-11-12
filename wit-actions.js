@@ -29,6 +29,12 @@ const actions = (fbMessage, sessions) => {
             }
         },
 
+        pendingSend(request) {
+            console.log(JSON.stringify(request));
+            request.context.contact = request.entities.contact;
+            return Promise.resolve(request.context); 
+        },
+
         findATM(request) {
             const sessionId = request.sessionId;
             const recipientId = sessions[sessionId].fbid;
