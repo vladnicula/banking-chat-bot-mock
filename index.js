@@ -10,7 +10,6 @@ const handleStaticActions = require('./static-actions');
 
 const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
-const witActions = require('./wit-actions')(fbMessage, sessions);
 
 
 const {requestMoneySendAction, isTemporarySendRequest} = require('./actions/request-money-send');
@@ -41,6 +40,9 @@ const fbMessage = (id, text) => {
             return json;
         });
 };
+
+const witActions = require('./wit-actions')(fbMessage, sessions);
+
 
 // Wit.ai parameters
 const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
