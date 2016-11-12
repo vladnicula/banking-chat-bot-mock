@@ -6,11 +6,16 @@ const request = require('request');
 const app = express();
 const parser = require('./parse-request');
 
+const persistenceService = require('./persistence-service');
+
 app.set('port', (process.env.PORT || 5000));
 
 const USER_CHAT_IDS = {
-    'Raul': '981647388611508',
-    'Vlad': '1221584201246326'
+	'Raul': '981647388611508',
+	'Vlad': '1221584201246326',
+	'Bogdan': '1325850250780262',
+	'Horia': '1203276786414242',
+	'Vivianne': '1130662566983525'
 };
 
 // Process application/x-www-form-urlencoded
@@ -56,9 +61,15 @@ app.post('/webhook/', function (req, res) {
         const event = req.body.entry[0].messaging[i];
         const sender = event.sender.id;
 
+        const session = persistenceService.getSessionOfUserId(sender);
+
+        if ( session.flowState !== null ) {
+        	console.log('should handle special flow case, not beginning of new flow');
+        }
+
         console.log('JSON.stringify(event)', JSON.stringify(event));
 
-        if (event.message) {
+        if ( event.message ) {
             const response = parser(event);
             sendTextMessage(sender, response);
         }
