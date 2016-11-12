@@ -46,7 +46,7 @@ function acceptActionByUser ( senderChatId, fbSendTextMessage ) {
 	console.log(`will ${type} from ${sourceUserId} to ${targetUserId}`);
 
 	if ( type === 'send' ) {
-		userService
+		return userService
 			.sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
 			.then(pendingActions.resolvePendingAction(actionId))
 			.then( () => {
