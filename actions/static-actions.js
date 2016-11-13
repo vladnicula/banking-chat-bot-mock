@@ -1,6 +1,6 @@
 'use strict';
 
-const {acceptActionByUser} = require('./request-money-send');
+const {acceptActionByUser, rejectActionByUser} = require('./request-money-send');
 const userService = require('../services/user-service');
 const pendingActionService = require('../services/pending-action-service');
 
@@ -35,11 +35,15 @@ const staticActions = (event, fbSend) => {
     }
 
     const sendingUserInternalId = userService.getUserByChatId(senderId).id;
-    if (
-        event.message.text.toLowerCase() === 'accept'
-        && pendingActionService.getPendingActionsByUserId(sendingUserInternalId).length ) {
+    const pendingActionsForUser = pendingActionService.getPendingActionsByUserId(sendingUserInternalId).length;
+    const lowerCasedMessage = event.message.text.toLowerCase();
 
-        return acceptActionByUser(sendingUserInternalId, fbSend);
+    if ( pendingActionsForUser ) {
+        if ( lowerCasedMessage === 'accept' ) {
+            return acceptActionByUser(sendingUserInternalId, fbSend);
+        } else if ( lowerCasedMessage === 'reject' ) {
+            return rejectActionByUser(sendingUserInternalId, fbSend);
+        }
     }
 
     return null;

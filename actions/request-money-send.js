@@ -59,8 +59,38 @@ function acceptActionByUser(senderChatId, fbSendTextMessage) {
                     })
                 ]);
             });
+
+}
+
+function rejectActionByUser(senderChatId, fbSendTextMessage) {
+    console.log('rejectActionByUser', senderChatId, fbSendTextMessage);
+    const pendingActions = pendingActionService.getPendingActionsByUserId(senderChatId);
+    if (pendingActions.length > 1) {
+        console.error(`Too many pending actions for ${senderChatId}`);
     }
 
+    if (!pendingActions.length) {
+        console.error(`No pending action for ${senderChatId}`);
+    }
+
+    const {sourceUserId, targetUserId, ammount, type, id:actionId} = pendingActions[0];
+
+    console.log(`will ${type} from ${sourceUserId} to ${targetUserId}`);
+
+    if (type === 'send') {
+        return pendingActionService.resolvePendingAction(actionId)
+            .then(() => {
+                return Promise.all([
+                    fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
+                        "text": `Rejected the transer request from ${userService.getUserById(sourceUserId).name}`
+                    }),
+
+                    fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
+                        "text": `${userService.getUserById(targetUserId).name} rejected your transaction.`
+                    })
+                ]);
+            });
+    }
 }
 
 module.exports = {requestMoneySendAction, acceptActionByUser};
