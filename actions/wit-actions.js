@@ -52,7 +52,7 @@ const actions = (fbMessage, sessions) => {
                         return Promise.resolve(request.context);
                     });
             } catch (err) {
-                return fbMessage(senderId, {text: 'Sorry, I could not understand your request'});
+                return fbMessage(senderId, {text: 'Sorry, I could not understand your request completely.'});
             }
         },
 
@@ -98,9 +98,8 @@ const actions = (fbMessage, sessions) => {
         },
 
         done(request) {
-            const {fbid:senderId} = sessions[request.sessionId];
             request.context.done = true;
-            return fbMessage(senderId, {text: "Alright. Anything else I can help you with?"});
+            return Promise.resolve(null);
         }
     }
 };
