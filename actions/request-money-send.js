@@ -8,6 +8,14 @@ function requestMoneySendAction(senderChatId, {ammount, type, targetName}, fbSen
   const targetUser = userService.getUserByName(targetName);
   const senderUser = userService.getUserByChatId(senderChatId);
 
+  if ( !targetUser ) {
+    return fbSendTextMessage(senderUser.chatId, {
+      "text": `I couldn't find ${targetName}`
+    }).catch((err)=> {
+      console.error(err);
+    });
+  }
+
   const message = `Hey ${targetName}, ${senderUser.name} wants to send \$${ammount} to you.`;
 
   const actionId = pendingActionService.registerPendingAction({
@@ -51,7 +59,7 @@ function acceptActionByUser(senderChatId, fbSendTextMessage) {
       .then(() => {
         return Promise.all([
           fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
-            "text": `Successfuly received money from ${userService.getUserById(sourceUserId).name}`
+            "text": `Successfully received money from ${userService.getUserById(sourceUserId).name}`
           }),
 
           fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
