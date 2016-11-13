@@ -81,6 +81,7 @@ app.post('/webhook/', function (req, res) {
 
     data.entry.forEach(entry => {
         entry.messaging.forEach(event => {
+            console.log('___event__', event)
             if (event.message && !event.message.is_echo) {
                 // Yay! We got a new message!
                 // We retrieve the Facebook user
