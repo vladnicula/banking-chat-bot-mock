@@ -89,12 +89,16 @@ const actions = (fbMessage, sessions) => {
             const senderUser = userService.getUserByChatId(senderId);
             const {value:ammount} = entities.amount_of_money[0];
 
-            senderUser.balance += ammount;
-            senderUser.balanceSavings -= ammount;
+            if (userService.hasEnoughMoney(senderUser, ammount, "balanceSavings")) {
+                userService.addSumTo(senderUser, ammount, "balance");
+                userService.withdrawSumFrom(senderUser, ammount, "balanceSavings");
 
-            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account. Here's your updated balance:`}).then(() => {
-                this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
-            });
+                return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account. Here's your updated balance:`}).then(() => {
+                    this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
+                });
+            } else {
+                return fbMessage(senderId, {text: "Sorry, you don't have enough money for this operation."});
+            }
         },
 
         done(request) {

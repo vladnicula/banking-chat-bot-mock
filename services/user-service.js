@@ -17,6 +17,19 @@ const userService = {
         return userId;
     },
 
+    hasEnoughMoney(user, sum, accountType = "balance") {
+        const balance = user[accountType];
+        return balance >= parseFloat(sum.toFixed(2));
+    },
+
+    addSumTo(user, sum, accountType = "balance") {
+        user[accountType] += parseFloat(sum.toFixed(2));
+    },
+
+    withdrawSumFrom(user, sum, accountType = "balance") {
+        user[accountType] -= parseFloat(sum.toFixed(2));
+    },
+
     getUserById: (userId) => {
         return usersById[userId];
     },
