@@ -73,6 +73,33 @@ const actions = (fbMessage, sessions) => {
             const balance = senderUser.balance;
             const savingsBalance = senderUser.balanceSavings;
 
+            return this._sendBalance(senderId, balance, savingsBalance);
+        },
+
+        sayHello(request) {
+            const {fbid:senderId} = sessions[request.sessionId];
+            const sender = userService.getUserByChatId(senderId);
+            return fbMessage(senderId, {text: `Hello there ${sender.name}. What can I help you with?`});
+        },
+
+        /** Triggered when user wants to transfer money from one of their accounts to another */
+        transferBetweenAccounts(request) {
+            const {fbid:senderId} = sessions[request.sessionId];
+            const {entities} = request;
+            const senderUser = userService.getUserByChatId(senderId);
+            const {value:ammount} = entities.amount_of_money[0];
+
+            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account.`}).then(() => {
+                this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
+            });
+        },
+
+        done(request) {
+            request.context.done = true;
+            return Promise.resolve(null);
+        },
+
+        _sendBalance(senderId, balance, savingsBalance) {
             return fbMessage(senderId, {
                 "attachment": {
                     "type": "template",
@@ -93,26 +120,6 @@ const actions = (fbMessage, sessions) => {
                     }
                 }
             });
-        },
-
-        sayHello(request) {
-            const {fbid:senderId} = sessions[request.sessionId];
-            const sender = userService.getUserByChatId(senderId);
-            return fbMessage(senderId, {text: `Hello there ${sender.name}. What can I help you with?`});
-        },
-
-        /** Triggered when user wants to transfer money from one of their accounts to another */
-        transferBetweenAccounts(request) {
-            const {fbid:senderId} = sessions[request.sessionId];
-            const senderUser = userService.getUserByChatId(senderId);
-            return fbMessage(senderId, {
-                "text": senderUser.balance
-            });
-        },
-
-        done(request) {
-            request.context.done = true;
-            return Promise.resolve(null);
         }
     }
 };
