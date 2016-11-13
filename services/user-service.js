@@ -18,6 +18,10 @@ const userService = {
     },
 
     hasEnoughMoney(user, sum, accountType = "balance") {
+        if (sum < 0) {
+            return false;
+        }
+        
         const balance = user[accountType];
         return balance >= parseFloat(sum.toFixed(2));
     },
@@ -45,8 +49,8 @@ const userService = {
     sendMoneyBetweenUsersByIds: (sourceId, targetId, ammount) => {
         const sourceUser = userService.getUserById(sourceId);
         const targetUser = userService.getUserById(targetId);
-        sourceUser.balance -= ammount;
-        targetUser.balance += ammount;
+        userService.addSumTo(targetUser, ammount);
+        userService.withdrawSumFrom(sourceUser, ammount);
         return Promise.resolve();
     }
 };

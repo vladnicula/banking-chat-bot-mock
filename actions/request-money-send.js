@@ -57,52 +57,59 @@ function acceptActionByUser(senderChatId, fbSendTextMessage) {
     console.log(`will ${type} from ${sourceUserId} to ${targetUserId}`);
 
     if (type === 'send') {
-        return userService
-            .sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
-            .then(pendingActionService.resolvePendingAction(actionId))
-            .then(() => {
-                return Promise.all([
-                    fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
-                        "text": `Successfully received money from ${userService.getUserById(sourceUserId).name}`
-                    }),
+        const senderUser = userService.getUserByChatId(sourceUserId);
 
-                    fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
-                        "text": `${userService.getUserById(targetUserId).name} accepted your transaction.`
-                    })
-                ]);
-            });
+        // Only do the operation if the user has enough money available
+        if (userService.hasEnoughMoney(senderUser, ammount)) {
+            return userService
+                .sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
+                .then(pendingActionService.resolvePendingAction(actionId))
+                .then(() => {
+                    return Promise.all([
+                        fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
+                            "text": `Successfully received money from ${userService.getUserById(sourceUserId).name}`
+                        }),
+
+                        fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
+                            "text": `${userService.getUserById(targetUserId).name} accepted your transaction.`
+                        })
+                    ]);
+                });
+        } else {
+            return fbMessage(senderId, {text: "Sorry, you don't have enough money for this operation."});
+        }
     }
 }
 
 function rejectActionByUser(senderChatId, fbSendTextMessage) {
-  console.log('rejectActionByUser', senderChatId, fbSendTextMessage);
-  const pendingActions = pendingActionService.getPendingActionsByUserId(senderChatId);
-  if (pendingActions.length > 1) {
-    console.error(`Too many pending actions for ${senderChatId}`);
-  }
+    console.log('rejectActionByUser', senderChatId, fbSendTextMessage);
+    const pendingActions = pendingActionService.getPendingActionsByUserId(senderChatId);
+    if (pendingActions.length > 1) {
+        console.error(`Too many pending actions for ${senderChatId}`);
+    }
 
-  if (!pendingActions.length) {
-    console.error(`No pending action for ${senderChatId}`);
-  }
+    if (!pendingActions.length) {
+        console.error(`No pending action for ${senderChatId}`);
+    }
 
-  const {sourceUserId, targetUserId, ammount, type, id:actionId} = pendingActions[0];
+    const {sourceUserId, targetUserId, ammount, type, id:actionId} = pendingActions[0];
 
-  console.log(`will reject ${type} from ${sourceUserId} to ${targetUserId}`);
+    console.log(`will reject ${type} from ${sourceUserId} to ${targetUserId}`);
 
-  if (type === 'send') {
-    return pendingActionService.resolvePendingAction(actionId)
-      .then(() => {
-        return Promise.all([
-          fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
-            "text": `Rejected the transfer request from ${userService.getUserById(sourceUserId).name}`
-          }),
+    if (type === 'send') {
+        return pendingActionService.resolvePendingAction(actionId)
+            .then(() => {
+                return Promise.all([
+                    fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
+                        "text": `Rejected the transfer request from ${userService.getUserById(sourceUserId).name}`
+                    }),
 
-          fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
-            "text": `${userService.getUserById(targetUserId).name} rejected your transaction.`
-          })
-        ]);
-    });
-  }
+                    fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
+                        "text": `${userService.getUserById(targetUserId).name} rejected your transaction.`
+                    })
+                ]);
+            });
+    }
 }
 
 module.exports = {requestMoneySendAction, acceptActionByUser, rejectActionByUser};
