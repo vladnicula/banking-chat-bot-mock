@@ -35,6 +35,8 @@ const pendingActionService = {
             .concat(pendingActionsByUserId[targetUserId].slice(indexOfActionId + 1));
 
         delete pendingActionsById[actionId];
+
+        return Promise.resolve();
     },
 
     getActionById: (actionId) => {
