@@ -94,8 +94,9 @@ const actions = (fbMessage, sessions) => {
         },
 
         done(request) {
+            const {fbid:senderId} = sessions[request.sessionId];
             request.context.done = true;
-            return Promise.resolve(null);
+            return fbMessage(senderId, {text: "Alright. Anything else I can help you with?"});
         }
     }
 };
