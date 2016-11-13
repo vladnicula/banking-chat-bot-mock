@@ -92,7 +92,7 @@ const actions = (fbMessage, sessions) => {
             senderUser.balance += ammount;
             senderUser.balanceSavings -= ammount;
 
-            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account.`}).then(() => {
+            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account. Here's your updated balance:`}).then(() => {
                 this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
             });
         },
