@@ -21,7 +21,7 @@ const userService = {
         if (sum < 0) {
             return false;
         }
-        
+
         const balance = user[accountType];
         return balance >= parseFloat(sum.toFixed(2));
     },

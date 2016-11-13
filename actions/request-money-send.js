@@ -57,7 +57,7 @@ function acceptActionByUser(senderChatId, fbSendTextMessage) {
     console.log(`will ${type} from ${sourceUserId} to ${targetUserId}`);
 
     if (type === 'send') {
-        const senderUser = userService.getUserByChatId(sourceUserId);
+        const senderUser = userService.getUserById(sourceUserId);
 
         // Only do the operation if the user has enough money available
         if (userService.hasEnoughMoney(senderUser, ammount)) {
