@@ -111,12 +111,12 @@ const actions = (fbMessage, sessions) => {
                         "elements": [
                             {
                                 "title": "Current account balance",
-                                "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT7fMBEDwtqCr_50CjOlQiuaIoJ0McIA5PFHJKpPZMb1A_w1_Eh",
+                                "image_url": "/assets/savings.png",
                                 "subtitle": `$${balance}`
                             },
                             {
                                 "title": "Savins account balance",
-                                "image_url": "https://cdn3.iconfinder.com/data/icons/shopping-icons-1/512/Piggy_Bank-512.png",
+                                "image_url": "/assets/wallet.png",
                                 "subtitle": `$${savingsBalance}`
                             }
                         ]
