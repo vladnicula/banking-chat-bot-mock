@@ -92,7 +92,7 @@ const actions = (fbMessage, sessions) => {
             senderUser.balance += ammount;
             senderUser.balanceSavings -= ammount;
 
-            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account.`}).then(() => {
+            return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account. Here's your updated balance:`}).then(() => {
                 this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
             });
         },
@@ -111,12 +111,12 @@ const actions = (fbMessage, sessions) => {
                         "elements": [
                             {
                                 "title": "Current account balance",
-                                "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT7fMBEDwtqCr_50CjOlQiuaIoJ0McIA5PFHJKpPZMb1A_w1_Eh",
+                                "image_url": "http://i.imgur.com/RPZqMaL.png",
                                 "subtitle": `$${balance}`
                             },
                             {
                                 "title": "Savins account balance",
-                                "image_url": "https://cdn3.iconfinder.com/data/icons/shopping-icons-1/512/Piggy_Bank-512.png",
+                                "image_url": "http://i.imgur.com/GgmPMcA.png",
                                 "subtitle": `$${savingsBalance}`
                             }
                         ]
