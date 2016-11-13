@@ -89,6 +89,9 @@ const actions = (fbMessage, sessions) => {
             const senderUser = userService.getUserByChatId(senderId);
             const {value:ammount} = entities.amount_of_money[0];
 
+            senderUser.balance += ammount;
+            senderUser.balanceSavings -= ammount;
+
             return fbMessage(senderId, {"text": `Transferring $${ammount} from your savings to your current account.`}).then(() => {
                 this._sendBalance(senderId, senderUser.balance, senderUser.balanceSavings);
             });
