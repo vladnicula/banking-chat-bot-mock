@@ -43,14 +43,23 @@ const actions = (fbMessage, sessions) => {
                 const {value:type} = entities.transferMoney[0];
                 const {value:targetName} = entities.contact ? entities.contact[0] : entities.location && entities.location[0];
 
-                console.log('pending send', {senderId, ammount, type, targetName});
+                const senderUser = userService.getUserByChatId(senderId);
 
-                return requestMoneySendAction(senderId, {ammount, type, targetName}, fbMessage)
-                    .then(()=> {
-                        request.context.contact = request.entities.contact.value;
-                        request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
-                        return Promise.resolve(request.context);
-                    });
+                // Only do the operation if the user has enough money available
+                if (userService.hasEnoughMoney(senderUser, ammount)) {
+                    console.log('pending send', {senderId, ammount, type, targetName});
+
+                    return requestMoneySendAction(senderId, {ammount, type, targetName}, fbMessage)
+                        .then(()=> {
+                            request.context.contact = request.entities.contact.value;
+                            request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
+                            return Promise.resolve(request.context);
+                        });
+                } else {
+                    return fbMessage(senderId, {text: "Sorry, you don't have enough money for this operation."});
+                }
+
+
             } catch (err) {
                 return fbMessage(senderId, {text: 'Sorry, I could not understand your request completely.'});
             }

@@ -42,7 +42,6 @@ function requestMoneySendAction(senderChatId, {ammount, type, targetName}, fbSen
 }
 
 function acceptActionByUser(senderChatId, fbSendTextMessage) {
-    console.log('acceptActionByUser', senderChatId, fbSendTextMessage);
     const pendingActions = pendingActionService.getPendingActionsByUserId(senderChatId);
     if (pendingActions.length > 1) {
         console.error(`Too many pending actions for ${senderChatId}`);
@@ -57,27 +56,21 @@ function acceptActionByUser(senderChatId, fbSendTextMessage) {
     console.log(`will ${type} from ${sourceUserId} to ${targetUserId}`);
 
     if (type === 'send') {
-        const senderUser = userService.getUserById(sourceUserId);
+        return userService
+            .sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
+            .then(pendingActionService.resolvePendingAction(actionId))
+            .then(() => {
+                return Promise.all([
+                    fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
+                        "text": `Successfully received money from ${userService.getUserById(sourceUserId).name}`
+                    }),
 
-        // Only do the operation if the user has enough money available
-        if (userService.hasEnoughMoney(senderUser, ammount)) {
-            return userService
-                .sendMoneyBetweenUsersByIds(sourceUserId, targetUserId, ammount)
-                .then(pendingActionService.resolvePendingAction(actionId))
-                .then(() => {
-                    return Promise.all([
-                        fbSendTextMessage(userService.getUserById(targetUserId).chatId, {
-                            "text": `Successfully received money from ${userService.getUserById(sourceUserId).name}`
-                        }),
+                    fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
+                        "text": `${userService.getUserById(targetUserId).name} accepted your transaction.`
+                    })
+                ]);
+            });
 
-                        fbSendTextMessage(userService.getUserById(sourceUserId).chatId, {
-                            "text": `${userService.getUserById(targetUserId).name} accepted your transaction.`
-                        })
-                    ]);
-                });
-        } else {
-            return fbMessage(senderId, {text: "Sorry, you don't have enough money for this operation."});
-        }
     }
 }
 
