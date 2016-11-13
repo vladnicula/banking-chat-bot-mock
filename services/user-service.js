@@ -23,11 +23,11 @@ const userService = {
     },
 
     addSumTo(user, sum, accountType = "balance") {
-        user[accountType] += parseFloat(sum.toFixed(2));
+        user[accountType] = parseFloat((user[accountType] + parseFloat(sum)).toFixed(2));
     },
 
     withdrawSumFrom(user, sum, accountType = "balance") {
-        user[accountType] -= parseFloat(sum.toFixed(2));
+        user[accountType] = parseFloat((user[accountType] - parseFloat(sum)).toFixed(2));
     },
 
     getUserById: (userId) => {
