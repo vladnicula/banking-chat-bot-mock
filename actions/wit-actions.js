@@ -35,8 +35,8 @@ const actions = (fbMessage, sessions) => {
 
         /** Triggered when a user wants to send money to another */
         pendingSend (request) {
-            const {sessionId, entities} = request;
-            const {fbid:senderId} = sessions[sessionId];
+            const {entities} = request;
+            const {fbid:senderId} = sessions[request.sessionId];
 
             try {
                 const {value:ammount} = entities.amount_of_money[0];
@@ -69,17 +69,30 @@ const actions = (fbMessage, sessions) => {
         /** Triggered when a user wants to check their account balance */
         getBalance(request) {
             const {fbid:senderId} = sessions[request.sessionId];
-            const {entities} = request;
             const senderUser = userService.getUserByChatId(senderId);
-            let balance = senderUser.balance;
-            let type = 'current';
+            const balance = senderUser.balance;
+            const savingsBalance = senderUser.balanceSavings;
 
-            if (entities && entities.ownAccount && entities.ownAccount[0].value === "savings") {
-                balance = senderUser.balanceSavings;
-                type = 'savings';
-            }
-
-            return fbMessage(senderId, {text: `Your ${type} balance is: $${balance}`});
+            return fbMessage(senderId, {
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [
+                            {
+                                "title": "Current account balance",
+                                "image_url": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT7fMBEDwtqCr_50CjOlQiuaIoJ0McIA5PFHJKpPZMb1A_w1_Eh",
+                                "subtitle": `$${balance}`
+                            },
+                            {
+                                "title": "Savins account balance",
+                                "image_url": "https://cdn3.iconfinder.com/data/icons/shopping-icons-1/512/Piggy_Bank-512.png",
+                                "subtitle": `$${savingsBalance}`
+                            }
+                        ]
+                    }
+                }
+            });
         },
 
         sayHello(request) {

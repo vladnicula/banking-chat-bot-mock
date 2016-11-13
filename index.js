@@ -43,21 +43,6 @@ const fbMessage = (id, message) => {
         });
 };
 
-const registerWelcomeScreen = () => {
-    const body = JSON.stringify({
-        "setting_type":"greeting",
-        greeting: `Hello there. What can I help you with?`
-    });
-
-    const qs = 'access_token=' + encodeURIComponent(FB_PAGE_ACCESS_TOKEN);
-    return fetch('https://graph.facebook.com/me/thread_settings?' + qs, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body
-    });
-};
-registerWelcomeScreen();
-
 const witActions = require('./actions/wit-actions')(fbMessage, store.getSessions());
 
 // Wit.ai parameters
