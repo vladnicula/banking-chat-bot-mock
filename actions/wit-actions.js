@@ -35,13 +35,13 @@ const actions = (fbMessage, sessions) => {
 
         /** Triggered when a user wants to send money to another */
         pendingSend (request) {
+            const {sessionId, entities} = request;
+            const {fbid:senderId} = sessions[sessionId];
+
             try {
-                const {sessionId, entities} = request;
                 const {value:ammount} = entities.amount_of_money[0];
                 const {value:type} = entities.transferMoney[0];
                 const {value:targetName} = entities.contact ? entities.contact[0] : entities.location && entities.location[0];
-
-                const {fbid:senderId} = sessions[sessionId];
 
                 console.log('pending send', {senderId, ammount, type, targetName});
 
