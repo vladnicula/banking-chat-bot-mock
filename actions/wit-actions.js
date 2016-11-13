@@ -111,12 +111,12 @@ const actions = (fbMessage, sessions) => {
                         "elements": [
                             {
                                 "title": "Current account balance",
-                                "image_url": "/assets/savings.png",
+                                "image_url": "http://i.imgur.com/RPZqMaL.png",
                                 "subtitle": `$${balance}`
                             },
                             {
                                 "title": "Savins account balance",
-                                "image_url": "/assets/wallet.png",
+                                "image_url": "http://i.imgur.com/GgmPMcA.png",
                                 "subtitle": `$${savingsBalance}`
                             }
                         ]
