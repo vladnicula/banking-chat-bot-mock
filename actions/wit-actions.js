@@ -35,21 +35,25 @@ const actions = (fbMessage, sessions) => {
 
         /** Triggered when a user wants to send money to another */
         pendingSend (request) {
-            const {sessionId, entities} = request;
-            const {value:ammount} = entities.amount_of_money[0];
-            const {value:type} = entities.transferMoney[0];
-            const {value:targetName} = entities.contact[0];
+            try {
+                const {sessionId, entities} = request;
+                const {value:ammount} = entities.amount_of_money[0];
+                const {value:type} = entities.transferMoney[0];
+                const {value:targetName} = entities.contact ? entities.contact[0] : entities.location && entities.location[0];
 
-            const {fbid:senderId} = sessions[sessionId];
+                const {fbid:senderId} = sessions[sessionId];
 
-            console.log('pending send', {senderId, ammount, type, targetName});
+                console.log('pending send', {senderId, ammount, type, targetName});
 
-            return requestMoneySendAction(senderId, {ammount, type, targetName}, fbMessage)
-                .then(()=>{
-                    request.context.contact = request.entities.contact.value;
-                    request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
-                    return Promise.resolve(request.context);
-                });
+                return requestMoneySendAction(senderId, {ammount, type, targetName}, fbMessage)
+                    .then(()=> {
+                        request.context.contact = request.entities.contact.value;
+                        request.context.cash = request.entities.amount_of_money[0].value + request.entities.amount_of_money[0].unit;
+                        return Promise.resolve(request.context);
+                    });
+            } catch (err) {
+                return fbMessage(senderId, {text: 'Sorry, I could not understand your request'});
+            }
         },
 
         /** Triggered when user wants to find an ATM nearby */
