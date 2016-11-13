@@ -25,8 +25,8 @@ const userService = {
         return userService.getUserById(usersByChatId[userChatId]);
     },
 
-    getUserByName: (name) => {
-        return userService.getUserById(usersByName[name]);
+    getUserByName: (name='') => {
+        return userService.getUserById(usersByName[name.toLowerCase()]);
     },
 
     sendMoneyBetweenUsersByIds: (sourceId, targetId, ammount) => {
