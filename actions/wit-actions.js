@@ -75,9 +75,7 @@ const actions = (fbMessage, sessions) => {
                 type = 'savings';
             }
 
-            console.log('Balance', balance);
-
-            return fbMessage(senderId, {text: `Your ${type} balance is: ${balance}`});
+            return fbMessage(senderId, {text: `Your ${type} balance is: $${balance}`});
         },
 
         sayHello(request) {

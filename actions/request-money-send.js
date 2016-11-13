@@ -3,15 +3,15 @@
 const userService = require('../services/user-service');
 const pendingActionService = require('../services/pending-action-service');
 
-function requestMoneySendAction(senderChatId, {amount, type, targetName}, fbSendTextMessage) {
+function requestMoneySendAction(senderChatId, {ammount, type, targetName}, fbSendTextMessage) {
     console.log(userService, userService.getUserByName);
     const targetUser = userService.getUserByName(targetName);
     const senderUser = userService.getUserByChatId(senderChatId);
 
-    const message = `Hey ${targetName}, ${senderUser.name} wants to send \$${amount} to you.`;
+    const message = `Hey ${targetName}, ${senderUser.name} wants to send \$${ammount} to you.`;
 
     const actionId = pendingActionService.registerPendingAction({
-        ammount: parseFloat(amount),
+        ammount: parseFloat(ammount),
         type: 'send'
     }, senderUser.id, targetUser.id);
 
