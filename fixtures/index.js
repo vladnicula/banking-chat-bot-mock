@@ -6,7 +6,8 @@ const USERS = [
     {name: 'bogdan', chatId: '1325850250780262', balance: 320.00, balanceSavings: 3000},
     {name: 'horia', chatId: '1203276786414242', balance: 500, balanceSavings: 3000},
     {name: 'vivianne', chatId: '1130662566983525', balance: 755, balanceSavings: 3000},
-    {name: 'darius', chatId: '1620623094621856', balance: 1533, balanceSavings: 3200}
+    {name: 'darius', chatId: '1620623094621856', balance: 1533, balanceSavings: 3200},
+    {name: 'dean', chatId: '1546089858738120', balance: 1600, balanceSavings: 2400}
 ];
 
 const USER_IDS = USERS.map(userDetails => {
