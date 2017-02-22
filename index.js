@@ -12,7 +12,7 @@ const store = require('./services/store');
 const Wit = require('node-wit').Wit;
 const log = require('node-wit').log;
 
-const FB_PAGE_ACCESS_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN;
+const FB_PAGE_ACCESS_TOKEN = 'EAAZANcuaHsesBAMfTOeZBgZCJESrQmdUsAWZBoTzKF9gs62V0tZCZBLpzyZBsSmRTfhT8Px4MfbNEl1Q4q38vRZAwZB7RqkblMb6OakUgu4BoIcxvlFzzg2RXXBQ75i5N5ZB3ZBurWmSiUyB2Mc9wZAvxIWpKVS5AjAo4tQ9xP1FX2zGYwZDZD';
 
 // data layer init
 const fixtures = require('./fixtures');
