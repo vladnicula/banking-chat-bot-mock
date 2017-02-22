@@ -46,7 +46,7 @@ const fbMessage = (id, message) => {
 const witActions = require('./actions/wit-actions')(fbMessage, store.getSessions());
 
 // Wit.ai parameters
-const WIT_TOKEN = '5JI7XC4RZL2LBDC47LDBU5X443ZFEFYX';
+const WIT_TOKEN = 'V7XBJVVUNZAWX5E66WOAFXAOVOMCDENM';
 // Setting up our bot
 const wit = new Wit({
     accessToken: WIT_TOKEN,
