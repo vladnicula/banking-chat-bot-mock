@@ -74,11 +74,6 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong token');
 });
 
-var router = require('express').Router();
-router.post('/webhook', function(req, res) {
-    console.log('is it here?')
-});
-
 /** Handle incoming messages */
 app.post('/webhook/', function (req, res) {
 
